@@ -9,7 +9,7 @@ export default function Login() {
 	return (
 		<Container component="main" maxWidth="xs">
 			<Grid container direction={'column'}>
-				<Box sx={{ alignSelf: 'center', marginTop: '150px' }}>
+				<Box sx={{ alignSelf: 'center', marginTop: 4 }}>
 					<Image src="/logo.svg" alt="logo" width="200" height="200" priority />
 				</Box>
 
@@ -41,6 +41,7 @@ export default function Login() {
 						<TextField
 							label="Email"
 							variant="standard"
+							type="email"
 							sx={{
 								marginTop: '10px',
 								marginLeft: '50px',
@@ -66,10 +67,8 @@ export default function Login() {
 				<Button
 					variant="contained"
 					sx={{
-						borderRadius: 4,
 						marginTop: 2.5,
-						minHeight: 80,
-						width: 293,
+						width: 128,
 						alignSelf: 'center',
 					}}
 				>

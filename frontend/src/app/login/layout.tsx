@@ -23,6 +23,17 @@ const theme = createTheme({
 			textTransform: 'none',
 		},
 	},
+	components: {
+		MuiInputLabel: {
+			styleOverrides: {
+				root: {
+					'&.Mui-focused': {
+						color: 'rgb(0 0 0 / 60%)',
+					},
+				},
+			},
+		},
+	},
 });
 
 export default function LoginLayout({
