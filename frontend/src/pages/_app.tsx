@@ -6,7 +6,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import theme from '../../src/theme';
 import createEmotionCache from '../../src/createEmotionCache';
-import { AppBar, Box, Button, GlobalStyles, Toolbar } from '@mui/material';
+import { AppBar, Button, GlobalStyles, Toolbar } from '@mui/material';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -17,6 +19,9 @@ export interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
 	const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+	const router = useRouter();
+	const showButtonAppBar = router.pathname === '/login' ? true : false;
+
 	return (
 		<CacheProvider value={emotionCache}>
 			<Head>
@@ -30,15 +35,19 @@ export default function MyApp(props: MyAppProps) {
 						body: { backgroundColor: '#463B85', color: '#fff' },
 					}}
 				/>
-				<Box sx={{ flexGrow: 1 }}>
-					<AppBar position="static" sx={{ backgroundColor: '#7465B4' }}>
-						<Toolbar sx={{ justifyContent: 'flex-end' }}>
-							<Button color="primary" variant="contained">
-								Cadastre-se
-							</Button>
-						</Toolbar>
-					</AppBar>
-				</Box>
+
+				<AppBar position="static" sx={{ backgroundColor: '#7465B4' }}>
+					<Toolbar sx={{ justifyContent: 'flex-end' }}>
+						{showButtonAppBar && (
+							<Link href="/signup" passHref>
+								<Button color="primary" variant="contained">
+									Cadastre-se
+								</Button>
+							</Link>
+						)}
+					</Toolbar>
+				</AppBar>
+
 				<Component {...pageProps} />
 			</ThemeProvider>
 		</CacheProvider>
