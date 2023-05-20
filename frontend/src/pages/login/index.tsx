@@ -1,5 +1,3 @@
-'use client';
-
 import { Box, Container, Paper, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
