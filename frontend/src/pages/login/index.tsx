@@ -2,13 +2,22 @@ import { Box, Container, Paper, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Login() {
 	return (
 		<Container component="main" maxWidth="xs">
 			<Grid container direction={'column'}>
 				<Box sx={{ alignSelf: 'center', marginTop: 4 }}>
-					<Image src="/logo.svg" alt="logo" width="200" height="200" priority />
+					<Link href="/" passHref>
+						<Image
+							src="/logo.svg"
+							alt="logo"
+							width="200"
+							height="200"
+							priority
+						/>
+					</Link>
 				</Box>
 
 				<Paper
