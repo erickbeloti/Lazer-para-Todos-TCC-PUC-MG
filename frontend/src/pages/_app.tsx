@@ -9,6 +9,7 @@ import createEmotionCache from '../../src/createEmotionCache';
 import { AppBar, Button, GlobalStyles, Toolbar } from '@mui/material';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { SessionProvider } from 'next-auth/react';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -48,7 +49,9 @@ export default function MyApp(props: MyAppProps) {
 					</Toolbar>
 				</AppBar>
 
-				<Component {...pageProps} />
+				<SessionProvider session={pageProps.session}>
+					<Component {...pageProps} />
+				</SessionProvider>
 			</ThemeProvider>
 		</CacheProvider>
 	);
