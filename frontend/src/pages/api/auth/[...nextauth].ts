@@ -19,7 +19,7 @@ const authOptions: NextAuthOptions = {
 
 				try {
 					const user = await axios.post(
-						`${process.env.NEXTAUTH_URL}/api/auth/login`,
+						`${process.env.NEXT_PUBLIC_URL}/api/auth/login`,
 						{
 							email: email,
 							password: password,
