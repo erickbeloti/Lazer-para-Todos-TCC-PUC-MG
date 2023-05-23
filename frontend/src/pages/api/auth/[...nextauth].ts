@@ -1,5 +1,6 @@
 import axios from 'axios';
 import NextAuth, { NextAuthOptions } from 'next-auth';
+import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const authOptions: NextAuthOptions = {
@@ -10,7 +11,7 @@ const authOptions: NextAuthOptions = {
 		CredentialsProvider({
 			type: 'credentials',
 			credentials: {},
-			async authorize(credentials, req) {
+			async authorize(credentials, _req) {
 				const { email, password } = credentials as {
 					email: string;
 					password: string;
@@ -18,7 +19,7 @@ const authOptions: NextAuthOptions = {
 
 				try {
 					const user = await axios.post(
-						'https://apim-tu.azure-api.net/lazer-para-todos/auth/login',
+						`${process.env.NEXTAUTH_URL}/api/auth/login`,
 						{
 							email: email,
 							password: password,
@@ -33,28 +34,44 @@ const authOptions: NextAuthOptions = {
 					if (user) {
 						return user.data;
 					}
+
+					return null;
 				} catch (e) {
-					console.log(e);
 					throw new Error('invalid credentials');
 				}
 			},
 		}),
 	],
 	callbacks: {
-		jwt({ token, account }) {
-			if (account) {
-				token.accessToken = account?.access_token;
+		async jwt({ token, user }): Promise<JWT> {
+			if (user) {
+				token.accessToken = user.accessToken;
+				token.userRole = user.userRole;
+			}
+
+			if (token.accessToken) {
+				const tokenParsed = JSON.parse(
+					Buffer.from(token.accessToken.split('.')[1], 'base64').toString(),
+				);
+				const dateNowInSeconds = new Date().getTime() / 1000;
+				if (dateNowInSeconds > tokenParsed.exp) {
+					return {
+						...token,
+						error: 'expired token',
+					};
+				}
 			}
 
 			return token;
 		},
-		session({ session, token }) {
+		async session({ session, token }) {
 			session.accessToken = token.accessToken;
+
 			return session;
 		},
 	},
 	pages: {
-		signIn: '/login',
+		signIn: '/signin',
 	},
 };
 

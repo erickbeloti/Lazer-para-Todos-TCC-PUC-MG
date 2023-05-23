@@ -5,9 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { FormEventHandler, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Login() {
 	const [userInfo, setUserInfo] = useState({ email: '', password: '' });
+	const router = useRouter();
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async e => {
 		e.preventDefault();
@@ -15,9 +17,14 @@ export default function Login() {
 		const res = await signIn('credentials', {
 			email: userInfo.email,
 			password: userInfo.password,
+			redirect: false,
 		});
 
-		console.log(res);
+		if (res?.ok) {
+			const url = new URL(res.url || '');
+			const callback = url.searchParams.get('callbackUrl');
+			router.push(callback || '/');
+		}
 	};
 
 	return (
