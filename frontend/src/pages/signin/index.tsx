@@ -20,6 +20,8 @@ export default function Login() {
 			redirect: false,
 		});
 
+		console.log(res);
+
 		if (res?.ok) {
 			const url = new URL(res.url || '');
 			const callback = url.searchParams.get('callbackUrl');
