@@ -20,7 +20,8 @@ const authOptions: NextAuthOptions = {
 				try {
 					const user = await axios.post(
 						`${
-							process.env.NEXT_PUBLIC_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL
+							process.env.NEXT_PUBLIC_URL ??
+							`https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
 						}/api/auth/login`,
 						{
 							email: email,
