@@ -110,17 +110,6 @@ export default function SignIn() {
 					>
 						Entrar
 					</Button>
-					<Button
-						variant="contained"
-						sx={{
-							marginTop: 2.5,
-							width: 128,
-							alignSelf: 'center',
-						}}
-						onClick={() => router.push('/')}
-					>
-						Outro botão
-					</Button>
 				</Grid>
 			</form>
 		</Container>
