@@ -18,14 +18,15 @@ export default function Login() {
 			email: userInfo.email,
 			password: userInfo.password,
 			redirect: false,
-			callbackUrl: '/pcd',
+			callbackUrl: '/',
 		});
 
 		if (res?.ok) {
 			// const url = new URL(res.url || '');
 			// const callback = url.searchParams.get('callbackUrl');
+			console.log(res.url);
 
-			router.push('/pcd');
+			router.push(res.url || '');
 		}
 	};
 
