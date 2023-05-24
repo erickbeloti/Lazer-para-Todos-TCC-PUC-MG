@@ -4,7 +4,6 @@ import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const authOptions: NextAuthOptions = {
-	debug: true,
 	session: {
 		strategy: 'jwt',
 	},
@@ -41,7 +40,6 @@ const authOptions: NextAuthOptions = {
 
 					return null;
 				} catch (e) {
-					console.log(e);
 					throw new Error('invalid credentials');
 				}
 			},
@@ -71,6 +69,7 @@ const authOptions: NextAuthOptions = {
 		},
 		async session({ session, token }) {
 			session.accessToken = token.accessToken;
+			session.userRole = token.userRole;
 
 			return session;
 		},

@@ -7,7 +7,7 @@ import { signIn } from 'next-auth/react';
 import { FormEventHandler, useState } from 'react';
 import { useRouter } from 'next/router';
 
-export default function Login() {
+export default function SignIn() {
 	const [userInfo, setUserInfo] = useState({ email: '', password: '' });
 	const router = useRouter();
 
@@ -18,15 +18,10 @@ export default function Login() {
 			email: userInfo.email,
 			password: userInfo.password,
 			redirect: false,
-			callbackUrl: '/',
 		});
 
 		if (res?.ok) {
-			// const url = new URL(res.url || '');
-			// const callback = url.searchParams.get('callbackUrl');
-			console.log(res.url);
-
-			router.push(res.url || '');
+			router.push('/app');
 		}
 	};
 
@@ -114,6 +109,17 @@ export default function Login() {
 						type="submit"
 					>
 						Entrar
+					</Button>
+					<Button
+						variant="contained"
+						sx={{
+							marginTop: 2.5,
+							width: 128,
+							alignSelf: 'center',
+						}}
+						onClick={() => router.push('/')}
+					>
+						Outro botão
 					</Button>
 				</Grid>
 			</form>
