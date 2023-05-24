@@ -21,10 +21,10 @@ export default function Login() {
 		});
 
 		if (res?.ok) {
-			const url = new URL(res.url || '');
-			const callback = url.searchParams.get('callbackUrl');
+			// const url = new URL(res.url || '');
+			// const callback = url.searchParams.get('callbackUrl');
 
-			router.push(callback || '/');
+			router.push('/');
 		}
 	};
 

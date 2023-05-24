@@ -1,5 +1,6 @@
 import { getToken } from 'next-auth/jwt';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
+
 export async function middleware(request: NextRequest, _next: NextFetchEvent) {
 	const { pathname } = request.nextUrl;
 	const protectedPaths = ['/pcd', '/proprietario'];
@@ -12,6 +13,7 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
 
 	if (matchesProtectedPath) {
 		const token = await getToken({ req: request });
+
 		if (!token) {
 			const url = new URL(`/signin`, request.url);
 			url.searchParams.set('callbackUrl', encodeURI(request.url));
