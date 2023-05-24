@@ -25,6 +25,9 @@ export default function Login() {
 		if (res?.ok) {
 			const url = new URL(res.url || '');
 			const callback = url.searchParams.get('callbackUrl');
+
+			console.log(callback);
+
 			router.push(callback || '/');
 		}
 	};
