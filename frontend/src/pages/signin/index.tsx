@@ -7,7 +7,7 @@ import { signIn } from 'next-auth/react';
 import { FormEventHandler, useState } from 'react';
 import { useRouter } from 'next/router';
 
-export default function Login() {
+export default function SignIn() {
 	const [userInfo, setUserInfo] = useState({ email: '', password: '' });
 	const router = useRouter();
 
@@ -21,9 +21,7 @@ export default function Login() {
 		});
 
 		if (res?.ok) {
-			const url = new URL(res.url || '');
-			const callback = url.searchParams.get('callbackUrl');
-			router.push(callback || '/');
+			router.push('/app');
 		}
 	};
 

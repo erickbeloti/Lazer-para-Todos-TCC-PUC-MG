@@ -19,7 +19,10 @@ const authOptions: NextAuthOptions = {
 
 				try {
 					const user = await axios.post(
-						`${process.env.NEXT_PUBLIC_URL}/api/auth/login`,
+						`${
+							process.env.NEXT_PUBLIC_URL ??
+							`https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+						}/api/auth/login`,
 						{
 							email: email,
 							password: password,
@@ -67,6 +70,7 @@ const authOptions: NextAuthOptions = {
 		},
 		async session({ session, token }) {
 			session.accessToken = token.accessToken;
+			session.userRole = token.userRole;
 
 			return session;
 		},
