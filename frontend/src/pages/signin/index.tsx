@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { FormEventHandler, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 export default function Login() {
 	const [userInfo, setUserInfo] = useState({ email: '', password: '' });
@@ -18,6 +18,7 @@ export default function Login() {
 			email: userInfo.email,
 			password: userInfo.password,
 			redirect: false,
+			callbackUrl: '/',
 		});
 
 		if (res?.ok) {
