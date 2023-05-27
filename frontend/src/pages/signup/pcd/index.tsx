@@ -1,4 +1,10 @@
-import { Autocomplete, Button, Container, TextField } from '@mui/material';
+import {
+	Autocomplete,
+	Button,
+	Container,
+	TextField,
+	Typography,
+} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,6 +36,12 @@ const schema = yup
 		state: yup
 			.object({ code: yup.string().required('Estado obrigatório') })
 			.required('Estado obrigatório'),
+		city: yup
+			.object({ code: yup.string().required('Cidade obrigatório') })
+			.required('Cidade obrigatório'),
+		district: yup
+			.object({ code: yup.string().required('Bairro obrigatório') })
+			.required('Bairro obrigatório'),
 	})
 	.required();
 
@@ -45,15 +57,26 @@ export default function SignUpPcD() {
 			email: '',
 			password: '',
 			state: null,
+			city: null,
+			district: null,
 		},
 	});
 
 	const onSubmit = data => console.log(data);
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<Container component="main" maxWidth="sm">
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Grid container direction={'column'}>
+					<Grid xs>
+						<Typography
+							variant="h4"
+							sx={{ textAlign: 'center', fontWeight: 'bold' }}
+						>
+							PcD
+						</Typography>
+					</Grid>
+
 					<Controller
 						name="name"
 						control={control}
@@ -61,7 +84,7 @@ export default function SignUpPcD() {
 							<TextField
 								{...field}
 								label="Nome"
-								variant="standard"
+								variant="outlined"
 								error={!!errors.name}
 								helperText={errors.name?.message}
 							/>
@@ -74,7 +97,7 @@ export default function SignUpPcD() {
 							<TextField
 								{...field}
 								label="Email"
-								variant="standard"
+								variant="outlined"
 								type="email"
 								error={!!errors.email}
 								helperText={errors.email?.message}
@@ -88,7 +111,7 @@ export default function SignUpPcD() {
 							<TextField
 								{...field}
 								label="Senha"
-								variant="standard"
+								variant="outlined"
 								type="password"
 								error={!!errors.password}
 								helperText={errors.password?.message}
@@ -105,7 +128,7 @@ export default function SignUpPcD() {
 									onChange(item);
 								}}
 								value={value}
-								options={countries}
+								options={states}
 								autoHighlight
 								getOptionLabel={option => (option.label ? option.label : '')}
 								isOptionEqualToValue={(option, value) =>
@@ -119,7 +142,7 @@ export default function SignUpPcD() {
 											autoComplete: 'new-password',
 										}}
 										label="Estado"
-										variant="standard"
+										variant="outlined"
 										error={!!errors.state}
 										helperText={errors.state?.message}
 									/>
@@ -137,7 +160,7 @@ export default function SignUpPcD() {
 									onChange(item);
 								}}
 								value={value}
-								options={countries}
+								options={cities}
 								autoHighlight
 								getOptionLabel={option => (option.label ? option.label : '')}
 								isOptionEqualToValue={(option, value) =>
@@ -151,7 +174,7 @@ export default function SignUpPcD() {
 											autoComplete: 'new-password',
 										}}
 										label="Cidade"
-										variant="standard"
+										variant="outlined"
 										error={!!errors.state}
 										helperText={errors.state?.message}
 									/>
@@ -169,7 +192,7 @@ export default function SignUpPcD() {
 									onChange(item);
 								}}
 								value={value}
-								options={countries}
+								options={districts}
 								autoHighlight
 								getOptionLabel={option => (option.label ? option.label : '')}
 								isOptionEqualToValue={(option, value) =>
@@ -182,8 +205,8 @@ export default function SignUpPcD() {
 											...params.inputProps,
 											autoComplete: 'new-password',
 										}}
-										label="Cidade"
-										variant="standard"
+										label="Bairro"
+										variant="outlined"
 										error={!!errors.state}
 										helperText={errors.state?.message}
 									/>
@@ -236,16 +259,16 @@ export default function SignUpPcD() {
 	);
 }
 
-const state: readonly StateType[] = [
-	{ code: 'SP', label: 'São Paulo' },
+const states: readonly StateType[] = [
+	{ code: 'SP', label: 'SP' },
 	{
 		code: 'MG',
-		label: 'Minas Gerais',
+		label: 'MG',
 	},
-	{ code: 'RJ', label: 'Rio de Janeiro' },
+	{ code: 'RJ', label: 'RJ' },
 ];
 
-const city: readonly CityType[] = [
+const cities: readonly CityType[] = [
 	{ code: 1, label: 'São Paulo' },
 	{
 		code: 2,
@@ -254,11 +277,11 @@ const city: readonly CityType[] = [
 	{ code: 3, label: 'Rio de Janeiro' },
 ];
 
-const district: readonly DistrictType[] = [
-	{ code: 'SP', label: 'São Paulo' },
+const districts: readonly DistrictType[] = [
+	{ code: 1, label: 'Jardim Primavera' },
 	{
-		code: 'MG',
-		label: 'Minas Gerais',
+		code: 2,
+		label: 'Zona Rural',
 	},
-	{ code: 'RJ', label: 'Rio de Janeiro' },
+	{ code: 3, label: 'Rio de Janeiro' },
 ];
