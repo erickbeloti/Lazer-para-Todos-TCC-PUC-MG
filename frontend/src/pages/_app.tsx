@@ -10,6 +10,7 @@ import { AppBar, Button, GlobalStyles, Toolbar } from '@mui/material';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { SessionProvider } from 'next-auth/react';
+import Image from 'next/image';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -38,7 +39,17 @@ export default function MyApp(props: MyAppProps) {
 				/>
 
 				<AppBar position="static" sx={{ backgroundColor: '#7465B4' }}>
-					<Toolbar sx={{ justifyContent: 'flex-end' }}>
+					<Toolbar sx={{ justifyContent: 'space-between' }}>
+						<Link href="/" passHref>
+							<Image
+								src="/logo.svg"
+								alt="logo"
+								width="48"
+								height="48"
+								priority
+							/>
+						</Link>
+
 						{showButtonAppBar && (
 							<Link href="/signup" passHref>
 								<Button color="primary" variant="contained">
