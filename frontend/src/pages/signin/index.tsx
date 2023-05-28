@@ -4,19 +4,46 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { FormEventHandler, useState } from 'react';
 import { useRouter } from 'next/router';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+
+interface FormData {
+	email: string;
+	password: string;
+}
+
+const schema = yup
+	.object({
+		email: yup
+			.string()
+			.email('Deve ser um email válido')
+			.required('Email obrigatório'),
+		password: yup.string().required('Senha obrigatório'),
+	})
+	.required();
 
 export default function SignIn() {
-	const [userInfo, setUserInfo] = useState({ email: '', password: '' });
+	const {
+		handleSubmit,
+		control,
+		formState: { errors, isSubmitting },
+	} = useForm<FormData>({
+		resolver: yupResolver(schema),
+		defaultValues: {
+			email: '',
+			password: '',
+		},
+	});
 	const router = useRouter();
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async e => {
-		e.preventDefault();
+	const onSubmit: SubmitHandler<FormData> = async data => {
+		console.log(data);
 
 		const res = await signIn('credentials', {
-			email: userInfo.email,
-			password: userInfo.password,
+			email: data.email,
+			password: data.password,
 			redirect: false,
 		});
 
@@ -27,7 +54,7 @@ export default function SignIn() {
 
 	return (
 		<Container component="main" maxWidth="xs">
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit(onSubmit)} noValidate>
 				<Grid container direction={'column'}>
 					<Box sx={{ alignSelf: 'center', marginTop: 4 }}>
 						<Link href="/" passHref>
@@ -67,32 +94,49 @@ export default function SignIn() {
 						</Paper>
 
 						<Grid container direction={'column'}>
-							<TextField
-								label="Email"
-								variant="standard"
-								type="email"
-								sx={{
-									marginTop: '10px',
-									marginLeft: '50px',
-									marginRight: '50px',
-								}}
-								onChange={({ target }) =>
-									setUserInfo({ ...userInfo, email: target.value })
-								}
+							<Controller
+								name="email"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										required
+										label="Email"
+										variant="standard"
+										type="email"
+										sx={{
+											marginTop: '10px',
+											marginLeft: '50px',
+											marginRight: '50px',
+										}}
+										inputProps={{ autoComplete: 'username' }}
+										error={!!errors.email}
+										helperText={errors.email?.message}
+									/>
+								)}
 							/>
-							<TextField
-								label="Senha"
-								variant="standard"
-								type="password"
-								sx={{
-									marginTop: '4px',
-									marginLeft: '50px',
-									marginRight: '50px',
-									marginBottom: '40px',
-								}}
-								onChange={({ target }) =>
-									setUserInfo({ ...userInfo, password: target.value })
-								}
+
+							<Controller
+								name="password"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										required
+										label="Senha"
+										variant="standard"
+										type="password"
+										sx={{
+											marginTop: '4px',
+											marginLeft: '50px',
+											marginRight: '50px',
+											marginBottom: '40px',
+										}}
+										inputProps={{ autoComplete: 'password' }}
+										error={!!errors.password}
+										helperText={errors.password?.message}
+									/>
+								)}
 							/>
 						</Grid>
 					</Paper>
@@ -107,6 +151,7 @@ export default function SignIn() {
 							alignSelf: 'center',
 						}}
 						type="submit"
+						disabled={isSubmitting}
 					>
 						Entrar
 					</Button>

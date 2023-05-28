@@ -47,7 +47,10 @@ interface FormData {
 const schema = yup
 	.object({
 		name: yup.string().required('Nome obrigatório'),
-		email: yup.string().email().required('Email obrigatório'),
+		email: yup
+			.string()
+			.email('Deve ser um email válido')
+			.required('Email obrigatório'),
 		password: yup
 			.string()
 			.min(8, 'É necessário no mínimo 8 caracteres')
