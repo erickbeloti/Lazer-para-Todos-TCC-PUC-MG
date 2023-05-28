@@ -31,9 +31,15 @@ export default function SignUp() {
 					mt={1}
 				>
 					<Grid display={'flex'} xs>
-						<Button variant="contained" sx={{ flexGrow: 1 }}>
-							PcD
-						</Button>
+						<Link
+							href="/signup/pcd"
+							passHref
+							style={{ display: 'flex', flexGrow: 1, textDecoration: 'none' }}
+						>
+							<Button variant="contained" sx={{ flexGrow: 1 }}>
+								PcD
+							</Button>
+						</Link>
 					</Grid>
 					<Grid display={'flex'} xs>
 						<Button variant="contained" sx={{ flexGrow: 1 }}>
