@@ -42,9 +42,15 @@ export default function SignUp() {
 						</Link>
 					</Grid>
 					<Grid display={'flex'} xs>
-						<Button variant="contained" sx={{ flexGrow: 1 }}>
-							Proprietário
-						</Button>
+						<Link
+							href="/signup/proprietario"
+							passHref
+							style={{ display: 'flex', flexGrow: 1, textDecoration: 'none' }}
+						>
+							<Button variant="contained" sx={{ flexGrow: 1 }}>
+								Proprietário
+							</Button>
+						</Link>
 					</Grid>
 				</Grid>
 			</Grid>
