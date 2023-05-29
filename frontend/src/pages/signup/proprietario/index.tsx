@@ -18,7 +18,8 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { IMaskInput } from 'react-imask';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSnackbar } from 'notistack';
 
 interface StateType {
 	code: string;
@@ -107,10 +108,11 @@ const TextMaskCustom = React.forwardRef<HTMLElement, ControllerRenderProps>(
 );
 
 export default function SignUpProprietario() {
+	const { enqueueSnackbar } = useSnackbar();
 	const {
 		handleSubmit,
 		control,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm<FormData>({
 		resolver: yupResolver(schema),
 		defaultValues: {
@@ -128,6 +130,14 @@ export default function SignUpProprietario() {
 	});
 
 	const onSubmit: SubmitHandler<FormData> = data => console.log(data);
+
+	useEffect(() => {
+		if (Object.keys(errors).length > 0) {
+			enqueueSnackbar('Há campos inválidos, verifique e tente novamente', {
+				variant: 'error',
+			});
+		}
+	}, [errors, enqueueSnackbar]);
 
 	return (
 		<Container component="main" maxWidth="sm">
@@ -430,6 +440,7 @@ export default function SignUpProprietario() {
 							alignSelf: 'center',
 						}}
 						type="submit"
+						disabled={isSubmitting}
 					>
 						Cadastrar
 					</Button>

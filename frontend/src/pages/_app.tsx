@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { SessionProvider } from 'next-auth/react';
 import Image from 'next/image';
+import { SnackbarProvider } from 'notistack';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -61,7 +62,9 @@ export default function MyApp(props: MyAppProps) {
 				</AppBar>
 
 				<SessionProvider session={pageProps.session}>
-					<Component {...pageProps} />
+					<SnackbarProvider>
+						<Component {...pageProps} />
+					</SnackbarProvider>
 				</SessionProvider>
 			</ThemeProvider>
 		</CacheProvider>
