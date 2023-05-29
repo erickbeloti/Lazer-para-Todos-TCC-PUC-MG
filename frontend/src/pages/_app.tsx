@@ -38,7 +38,7 @@ export default function MyApp(props: MyAppProps) {
 					}}
 				/>
 
-				<AppBar position="static" sx={{ backgroundColor: '#7465B4' }}>
+				<AppBar position="sticky" sx={{ backgroundColor: '#7465B4' }}>
 					<Toolbar sx={{ justifyContent: 'space-between' }}>
 						<Link href="/" passHref>
 							<Image
