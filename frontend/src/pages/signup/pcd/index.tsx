@@ -12,6 +12,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useSnackbar } from 'notistack';
+import { useEffect } from 'react';
 
 interface StateType {
 	code: string;
@@ -71,10 +73,11 @@ const schema = yup
 	.required();
 
 export default function SignUpPcD() {
+	const { enqueueSnackbar } = useSnackbar();
 	const {
 		handleSubmit,
 		control,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm<FormData>({
 		resolver: yupResolver(schema),
 		defaultValues: {
@@ -89,6 +92,14 @@ export default function SignUpPcD() {
 	});
 
 	const onSubmit: SubmitHandler<FormData> = data => console.log(data);
+
+	useEffect(() => {
+		if (Object.keys(errors).length > 0) {
+			enqueueSnackbar('Há campos inválidos, verifique e tente novamente', {
+				variant: 'error',
+			});
+		}
+	}, [errors, enqueueSnackbar]);
 
 	return (
 		<Container component="main" maxWidth="sm">
@@ -332,6 +343,7 @@ export default function SignUpPcD() {
 							alignSelf: 'center',
 						}}
 						type="submit"
+						disabled={isSubmitting}
 					>
 						Cadastrar
 					</Button>

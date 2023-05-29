@@ -1,4 +1,12 @@
-import { Box, Container, Paper, TextField, Typography } from '@mui/material';
+import {
+	Alert,
+	Box,
+	Collapse,
+	Container,
+	Paper,
+	TextField,
+	Typography,
+} from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import Image from 'next/image';
@@ -8,6 +16,8 @@ import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { useSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
 
 interface FormData {
 	email: string;
@@ -25,6 +35,8 @@ const schema = yup
 	.required();
 
 export default function SignIn() {
+	const [openError, setOpenError] = useState(false);
+	const { enqueueSnackbar } = useSnackbar();
 	const {
 		handleSubmit,
 		control,
@@ -47,10 +59,29 @@ export default function SignIn() {
 			redirect: false,
 		});
 
+		if (res?.error) {
+			setOpenError(true);
+			enqueueSnackbar('Email ou senha inválidos. Confira suas credenciais', {
+				variant: 'error',
+			});
+		}
+
 		if (res?.ok) {
 			router.push('/app');
 		}
 	};
+
+	useEffect(() => {
+		if (openError) {
+			const timer = setTimeout(() => {
+				setOpenError(false);
+			}, 5000);
+
+			return () => {
+				clearTimeout(timer);
+			};
+		}
+	}, [openError]);
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -139,6 +170,13 @@ export default function SignIn() {
 								)}
 							/>
 						</Grid>
+
+						<Collapse in={openError}>
+							<Alert severity="error">
+								Email ou senha inválidos.{' '}
+								<strong>Confira suas credenciais</strong>
+							</Alert>
+						</Collapse>
 					</Paper>
 					<Typography sx={{ alignSelf: 'center', marginTop: 0.5 }}>
 						Esqueceu sua senha?
