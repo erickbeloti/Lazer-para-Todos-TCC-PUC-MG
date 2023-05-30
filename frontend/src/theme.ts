@@ -25,6 +25,29 @@ const theme = createTheme({
 		},
 	},
 	components: {
+		MuiFilledInput: {
+			styleOverrides: {
+				root: {
+					':hover': {
+						backgroundColor: 'rgb(255 255 255 / 80%)',
+					},
+					borderRadius: 15,
+					backgroundColor: '#fff',
+					'&.Mui-focused': {
+						backgroundColor: '#fff',
+					},
+					'::before': {
+						marginLeft: 10,
+						marginRight: 10,
+					},
+					'::after': {
+						marginLeft: 10,
+						marginRight: 10,
+						borderRadius: '15px',
+					},
+				},
+			},
+		},
 		MuiInputLabel: {
 			styleOverrides: {
 				root: {

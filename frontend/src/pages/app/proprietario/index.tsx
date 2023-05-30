@@ -6,7 +6,7 @@ export default function Index() {
 
 	return (
 		<>
-			<h1>Protected Page PcD</h1>
+			<h1>Protected Page Proprietario</h1>
 			<p>{session?.user?.email}</p>
 			<Button
 				variant="contained"
@@ -14,7 +14,7 @@ export default function Index() {
 					marginTop: 2.5,
 					width: 128,
 				}}
-				onClick={() => signOut({ callbackUrl: '/' })}
+				onClick={() => signOut({ callbackUrl: '/signin' })}
 			>
 				Sign out
 			</Button>
