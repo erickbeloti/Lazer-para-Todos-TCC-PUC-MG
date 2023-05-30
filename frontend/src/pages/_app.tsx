@@ -6,12 +6,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import theme from '../../src/theme';
 import createEmotionCache from '../../src/createEmotionCache';
-import { AppBar, Button, GlobalStyles, Toolbar } from '@mui/material';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { SessionProvider } from 'next-auth/react';
-import Image from 'next/image';
 import { SnackbarProvider } from 'notistack';
+import AppBar from '../components/AppBar';
+import { GlobalStyles } from '@mui/material';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -22,8 +20,6 @@ export interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
 	const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-	const router = useRouter();
-	const showButtonAppBar = router.pathname === '/signin' ? true : false;
 
 	return (
 		<CacheProvider value={emotionCache}>
@@ -39,30 +35,9 @@ export default function MyApp(props: MyAppProps) {
 					}}
 				/>
 
-				<AppBar position="sticky" sx={{ backgroundColor: '#7465B4' }}>
-					<Toolbar sx={{ justifyContent: 'space-between' }}>
-						<Link href="/" passHref>
-							<Image
-								src="/logo.svg"
-								alt="logo"
-								width="48"
-								height="48"
-								priority
-							/>
-						</Link>
-
-						{showButtonAppBar && (
-							<Link href="/signup" passHref>
-								<Button color="primary" variant="contained">
-									Cadastre-se
-								</Button>
-							</Link>
-						)}
-					</Toolbar>
-				</AppBar>
-
 				<SessionProvider session={pageProps.session}>
 					<SnackbarProvider>
+						<AppBar />
 						<Component {...pageProps} />
 					</SnackbarProvider>
 				</SessionProvider>
