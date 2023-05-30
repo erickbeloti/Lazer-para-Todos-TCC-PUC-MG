@@ -19,8 +19,7 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
 		}
 
 		if (token?.error === 'expired token') {
-			const url = new URL(`/signin`, request.url);
-
+			const url = new URL(`/signout`, request.url);
 			return NextResponse.redirect(url);
 		}
 
