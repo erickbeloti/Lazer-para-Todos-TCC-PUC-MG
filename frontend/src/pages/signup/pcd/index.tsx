@@ -14,27 +14,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
-
-interface StateType {
-	code: string;
-	label: string;
-}
-
-interface CityType {
-	code: number;
-	label: string;
-}
-
-interface DistrictType {
-	code: number;
-	label: string;
-}
-
-interface DisabilityType {
-	code: number;
-	label: string;
-	icon: string;
-}
+import { disabilitiesTypes } from '@/utils/utils';
+import { cities } from '@/utils/utils';
+import { districts } from '@/utils/utils';
+import { states } from '@/utils/utils';
 
 interface FormData {
 	name: string;
@@ -103,7 +86,7 @@ export default function SignUpPcD() {
 
 	return (
 		<Container component="main" maxWidth="sm">
-			<Box mt={8} />
+			<Box mt={2} />
 			<form onSubmit={handleSubmit(onSubmit)} noValidate>
 				<Grid container direction={'column'} rowSpacing={2}>
 					<Grid xs>
@@ -175,7 +158,7 @@ export default function SignUpPcD() {
 					</Grid>
 
 					<Grid container columnSpacing={2}>
-						<Grid xs={6} md={3}>
+						<Grid xs={4} md={3}>
 							<Controller
 								name="state"
 								control={control}
@@ -212,7 +195,7 @@ export default function SignUpPcD() {
 							/>
 						</Grid>
 
-						<Grid xs={6} md>
+						<Grid xs={8} md>
 							<Controller
 								name="city"
 								control={control}
@@ -352,43 +335,3 @@ export default function SignUpPcD() {
 		</Container>
 	);
 }
-
-const states: readonly StateType[] = [
-	{ code: 'SP', label: 'SP' },
-	{
-		code: 'MG',
-		label: 'MG',
-	},
-	{ code: 'RJ', label: 'RJ' },
-];
-
-const cities: readonly CityType[] = [
-	{ code: 1, label: 'São Paulo' },
-	{
-		code: 2,
-		label: 'Belo Horizonte',
-	},
-	{ code: 3, label: 'Rio de Janeiro' },
-];
-
-const districts: readonly DistrictType[] = [
-	{ code: 1, label: 'Jardim Primavera' },
-	{
-		code: 2,
-		label: 'Zona Rural',
-	},
-	{ code: 3, label: 'Rio de Janeiro' },
-];
-
-const disabilitiesTypes: readonly DisabilityType[] = [
-	{ code: 1, label: 'Física', icon: '/disabilities/fisica.svg' },
-	{
-		code: 2,
-		label: 'Auditiva',
-		icon: '/disabilities/auditiva.svg',
-	},
-	{ code: 3, label: 'Visual', icon: '/disabilities/visual.svg' },
-	{ code: 4, label: 'Intelectual', icon: '/disabilities/intelectual.svg' },
-	{ code: 5, label: 'Autismo', icon: '/disabilities/autismo.svg' },
-	{ code: 6, label: 'Idoso 80+', icon: '/disabilities/idoso80+.svg' },
-];
