@@ -50,7 +50,7 @@ export default function MyAppBar() {
 					</Link>
 				)}
 
-				{status === 'authenticated' && (
+				{status === 'authenticated' && !showButtonAppBar && (
 					<Box sx={{ flexGrow: 0 }}>
 						<Tooltip title="Configurações">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

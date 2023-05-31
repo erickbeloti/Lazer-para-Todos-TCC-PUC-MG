@@ -1,6 +1,8 @@
 import {
 	Alert,
+	Backdrop,
 	Box,
+	CircularProgress,
 	Collapse,
 	Container,
 	Paper,
@@ -11,7 +13,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import Image from 'next/image';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -35,6 +37,7 @@ const schema = yup
 	.required();
 
 export default function SignIn() {
+	const { status } = useSession();
 	const [openError, setOpenError] = useState(false);
 	const { enqueueSnackbar } = useSnackbar();
 	const {
@@ -82,6 +85,23 @@ export default function SignIn() {
 			};
 		}
 	}, [openError]);
+
+	useEffect(() => {
+		if (status === 'authenticated') {
+			router.replace('/app');
+		}
+	}, [status, router]);
+
+	if (status === 'authenticated' || status === 'loading') {
+		return (
+			<Backdrop
+				sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+				open
+			>
+				<CircularProgress color="inherit" />
+			</Backdrop>
+		);
+	}
 
 	return (
 		<Container component="main" maxWidth="xs">
