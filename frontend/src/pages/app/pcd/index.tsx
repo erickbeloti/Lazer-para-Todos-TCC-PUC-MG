@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import Link from 'next/link';
 
 export default function Index() {
 	return (
@@ -20,15 +21,17 @@ export default function Index() {
 					display={'flex'}
 					justifyContent={'end'}
 				>
-					<Button
-						variant="contained"
-						color="secondary"
-						sx={{
-							width: 200,
-						}}
-					>
-						Filtro Avançado
-					</Button>
+					<Link href="/app/pcd/advanced-filter" passHref>
+						<Button
+							variant="contained"
+							color="secondary"
+							sx={{
+								width: 200,
+							}}
+						>
+							Filtro Avançado
+						</Button>
+					</Link>
 				</Grid>
 				<Grid xs={12} sm={12} md={12} lg={12} xl={12}>
 					<Typography variant="body1" sx={{ fontWeight: 'bold' }}>
