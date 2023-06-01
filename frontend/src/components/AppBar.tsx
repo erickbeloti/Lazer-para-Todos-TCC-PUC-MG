@@ -52,14 +52,19 @@ export default function MyAppBar() {
 
 				{status === 'authenticated' && !showButtonAppBar && (
 					<Box sx={{ flexGrow: 0 }}>
-						<Tooltip title="Configurações">
-							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-								<Avatar
-									alt={session?.user?.name || 'avatar'}
-									src="/static/images/avatar/2.jpg"
-								/>
-							</IconButton>
-						</Tooltip>
+						<Box display={'flex'} flexDirection={'column'}>
+							<Tooltip title="Configurações">
+								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+									<Avatar
+										alt={session?.user?.name || 'avatar'}
+										sx={{ width: 30, height: 30 }}
+									/>
+								</IconButton>
+							</Tooltip>
+							<Typography textAlign="center" sx={{ color: '#fff' }}>
+								{session.user?.name}
+							</Typography>
+						</Box>
 						<Menu
 							sx={{ mt: '45px' }}
 							id="menu-appbar"
