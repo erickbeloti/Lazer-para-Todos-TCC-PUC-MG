@@ -47,7 +47,7 @@ export default function Index() {
 					>
 						<Avatar
 							alt="Pão e Prosa"
-							src="/companies/1.png"
+							src="/companies/1/1.png"
 							sx={{ width: 100, height: 100 }}
 						/>
 						<Typography

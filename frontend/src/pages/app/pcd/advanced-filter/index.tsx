@@ -275,7 +275,7 @@ export default function AdvancedFilter() {
 						<ListItemAvatar>
 							<Avatar
 								alt="Pão e Prosa"
-								src="/companies/1.png"
+								src="/companies/1/1.png"
 								sx={{ width: 50, height: 50 }}
 							/>
 						</ListItemAvatar>
