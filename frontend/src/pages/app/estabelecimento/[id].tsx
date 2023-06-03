@@ -32,7 +32,13 @@ const items = [
 	},
 ];
 
-function Item(props: any) {
+interface Item {
+	item: {
+		url: string;
+	};
+}
+
+function Item(props: Item) {
 	return (
 		<Box position={'relative'} height={300}>
 			<Image src={props.item.url} alt="logo" fill priority />
