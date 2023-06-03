@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import Grid from '@mui/material/Unstable_Grid2';
+import Link from 'next/link';
 
 interface FormData {
 	state: StateType | null;
@@ -271,20 +272,26 @@ export default function AdvancedFilter() {
 				}}
 			>
 				<List sx={{ display: 'flex', flexDirection: 'column' }}>
-					<ListItem sx={{ backgroundColor: '#6B3B82', borderRadius: 15 }}>
-						<ListItemAvatar>
-							<Avatar
-								alt="Pão e Prosa"
-								src="/companies/1/1.png"
-								sx={{ width: 50, height: 50 }}
+					<Link
+						href="/app/estabelecimento/1"
+						passHref
+						style={{ textDecoration: 'none' }}
+					>
+						<ListItem sx={{ backgroundColor: '#6B3B82', borderRadius: 15 }}>
+							<ListItemAvatar>
+								<Avatar
+									alt="Pão e Prosa"
+									src="/companies/1/1.png"
+									sx={{ width: 50, height: 50 }}
+								/>
+							</ListItemAvatar>
+							<ListItemText
+								primary="Pão e Prosa"
+								primaryTypographyProps={{ fontWeight: 700 }}
+								sx={{ color: '#fff' }}
 							/>
-						</ListItemAvatar>
-						<ListItemText
-							primary="Pão e Prosa"
-							primaryTypographyProps={{ fontWeight: 700 }}
-							sx={{ color: '#fff' }}
-						/>
-					</ListItem>
+						</ListItem>
+					</Link>
 
 					<Box component="li" m={1} />
 

@@ -39,25 +39,35 @@ export default function Index() {
 					</Typography>
 				</Grid>
 				<Grid>
-					<Box
-						display={'flex'}
-						flexDirection={'column'}
-						justifyContent={'center'}
-						alignItems={'center'}
+					<Link
+						href="/app/estabelecimento/1"
+						passHref
+						style={{ textDecoration: 'none' }}
 					>
-						<Avatar
-							alt="Pão e Prosa"
-							src="/companies/1/1.png"
-							sx={{ width: 100, height: 100 }}
-						/>
-						<Typography
-							variant="body1"
-							mt={1}
-							sx={{ textAlign: 'center', fontWeight: 'bold' }}
+						<Box
+							display={'flex'}
+							flexDirection={'column'}
+							justifyContent={'center'}
+							alignItems={'center'}
 						>
-							Pão e Prosa
-						</Typography>
-					</Box>
+							<Avatar
+								alt="Pão e Prosa"
+								src="/companies/1/1.png"
+								sx={{ width: 100, height: 100 }}
+							/>
+							<Typography
+								variant="body1"
+								mt={1}
+								sx={{
+									textAlign: 'center',
+									fontWeight: 'bold',
+									color: '#fff',
+								}}
+							>
+								Pão e Prosa
+							</Typography>
+						</Box>
+					</Link>
 				</Grid>
 				<Grid>
 					<Box

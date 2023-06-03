@@ -115,17 +115,17 @@ export default function Estabelecimento() {
 						Acessibilidades confirmadas
 					</Typography>
 
-					<FisicaSvg />
+					<FisicaSvg width={40} height={40} />
 
-					<VisualSvg />
+					<VisualSvg width={40} height={40} />
 
-					<AuditivaSvg fill="rgb(0 0 0 / 35%)" />
+					<AuditivaSvg fill="rgb(0 0 0 / 35%)" width={40} height={40} />
 
-					<Idoso80Svg />
+					<Idoso80Svg width={40} height={40} />
 
-					<IntelectualSvg fill="rgb(0 0 0 / 35%)" />
+					<IntelectualSvg fill="rgb(0 0 0 / 35%)" width={40} height={40} />
 
-					<AutismoSvg fill="rgb(0 0 0 / 35%)" />
+					<AutismoSvg fill="rgb(0 0 0 / 35%)" width={40} height={40} />
 
 					<Typography variant="h6" fontWeight={700}>
 						Descrição
@@ -140,6 +140,181 @@ export default function Estabelecimento() {
 						a diversidade e a inclusão, buscando promover um ambiente de
 						convivência harmônica e respeitosa.
 					</Typography>
+				</Box>
+			</Paper>
+
+			<Box mt={2} />
+
+			<Paper
+				variant="outlined"
+				sx={{
+					borderRadius: '15px',
+					border: 0,
+					p: 2,
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 3,
+				}}
+			>
+				<Box>
+					<Typography variant="h6" fontWeight={700}>
+						Ana Silva
+					</Typography>
+
+					<Paper
+						variant="outlined"
+						sx={{
+							borderRadius: '15px',
+							border: 0,
+							backgroundColor: '#6B3B82',
+							color: '#fff',
+							p: 2,
+						}}
+					>
+						<Grid container justifyContent={'end'}>
+							<Grid xs={12} md>
+								<Typography variant="subtitle2">
+									A Pão e Prosa é um lugar super aconchegante, com uma decoração
+									rústica que cria um ambiente convidativo para todos. Gostei
+									especialmente da disponibilidade de rampas e corrimões para
+									pessoas com mobilidade reduzida, o que mostra que eles se
+									preocupam com a acessibilidade. A única coisa que poderia ser
+									melhor é o tamanho da fonte no cardápio, que é um pouco
+									pequena para quem tem dificuldades visuais.
+								</Typography>
+							</Grid>
+
+							<Grid container direction={'column'}>
+								<Grid>
+									<Rating precision={0.5} size="large" value={4} readOnly />
+								</Grid>
+
+								<Grid container>
+									<FisicaSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<VisualSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<AuditivaSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<Idoso80Svg width={25} height={25} />
+
+									<IntelectualSvg
+										fill="rgb(0 0 0 / 35%)"
+										width={25}
+										height={25}
+									/>
+
+									<AutismoSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+								</Grid>
+							</Grid>
+						</Grid>
+					</Paper>
+				</Box>
+
+				<Box>
+					<Typography variant="h6" fontWeight={700}>
+						Maria Oliveira
+					</Typography>
+
+					<Paper
+						variant="outlined"
+						sx={{
+							borderRadius: '15px',
+							border: 0,
+							backgroundColor: '#6B3B82',
+							color: '#fff',
+							p: 2,
+						}}
+					>
+						<Grid container justifyContent={'end'}>
+							<Grid xs={12} md>
+								<Typography variant="subtitle2">
+									Sou apaixonada por essa cafeteria! Além de um ambiente
+									charmoso, eles possuem cardápio com opções veganas e sem
+									glúten, que é ótimo para quem tem restrições alimentares. Eu
+									também gostei da sinalização em braile nos cardápios, o que
+									torna o lugar ainda mais inclusivo.
+								</Typography>
+							</Grid>
+
+							<Grid container direction={'column'}>
+								<Grid>
+									<Rating precision={0.5} size="large" value={5} readOnly />
+								</Grid>
+
+								<Grid container>
+									<FisicaSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<VisualSvg width={25} height={25} />
+
+									<AuditivaSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<Idoso80Svg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<IntelectualSvg
+										fill="rgb(0 0 0 / 35%)"
+										width={25}
+										height={25}
+									/>
+
+									<AutismoSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+								</Grid>
+							</Grid>
+						</Grid>
+					</Paper>
+				</Box>
+
+				<Box>
+					<Typography variant="h6" fontWeight={700}>
+						Pedro Rocha
+					</Typography>
+
+					<Paper
+						variant="outlined"
+						sx={{
+							borderRadius: '15px',
+							border: 0,
+							backgroundColor: '#6B3B82',
+							color: '#fff',
+							p: 2,
+						}}
+					>
+						<Grid container justifyContent={'end'}>
+							<Grid xs={12} md>
+								<Typography variant="subtitle2">
+									A Pão e Prosa tem um café delicioso, mas senti falta de mais
+									opções de cadeiras e mesas acessíveis para cadeirantes. No
+									entanto, fiquei feliz em ver que eles possuem um banheiro
+									acessível, que é um item básico de acessibilidade que muitos
+									lugares ignoram.
+								</Typography>
+							</Grid>
+
+							<Grid container direction={'column'}>
+								<Grid>
+									<Rating precision={0.5} size="large" value={3} readOnly />
+								</Grid>
+
+								<Grid container>
+									<FisicaSvg width={25} height={25} />
+
+									<VisualSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<AuditivaSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<Idoso80Svg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+
+									<IntelectualSvg
+										fill="rgb(0 0 0 / 35%)"
+										width={25}
+										height={25}
+									/>
+
+									<AutismoSvg fill="rgb(0 0 0 / 35%)" width={25} height={25} />
+								</Grid>
+							</Grid>
+						</Grid>
+					</Paper>
 				</Box>
 			</Paper>
 		</Container>
