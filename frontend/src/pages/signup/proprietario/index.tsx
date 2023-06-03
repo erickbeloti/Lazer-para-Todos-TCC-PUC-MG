@@ -20,27 +20,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { IMaskInput } from 'react-imask';
 import React, { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-
-interface StateType {
-	code: string;
-	label: string;
-}
-
-interface CityType {
-	code: number;
-	label: string;
-}
-
-interface DistrictType {
-	code: number;
-	label: string;
-}
-
-interface DisabilityType {
-	code: number;
-	label: string;
-	icon: string;
-}
+import { cities, disabilitiesTypes, districts, states } from '@/utils/utils';
 
 interface FormData {
 	companyName: string;
@@ -141,7 +121,7 @@ export default function SignUpProprietario() {
 
 	return (
 		<Container component="main" maxWidth="sm">
-			<Box mt={8} />
+			<Box mt={2} />
 			<form onSubmit={handleSubmit(onSubmit)} noValidate>
 				<Grid container direction={'column'} rowSpacing={2}>
 					<Grid xs>
@@ -231,7 +211,7 @@ export default function SignUpProprietario() {
 					</Grid>
 
 					<Grid container columnSpacing={2}>
-						<Grid xs={6} md={3}>
+						<Grid xs={4} md={3}>
 							<Controller
 								name="state"
 								control={control}
@@ -268,7 +248,7 @@ export default function SignUpProprietario() {
 							/>
 						</Grid>
 
-						<Grid xs={6} md>
+						<Grid xs={8} md>
 							<Controller
 								name="city"
 								control={control}
@@ -449,43 +429,3 @@ export default function SignUpProprietario() {
 		</Container>
 	);
 }
-
-const states: readonly StateType[] = [
-	{ code: 'SP', label: 'SP' },
-	{
-		code: 'MG',
-		label: 'MG',
-	},
-	{ code: 'RJ', label: 'RJ' },
-];
-
-const cities: readonly CityType[] = [
-	{ code: 1, label: 'São Paulo' },
-	{
-		code: 2,
-		label: 'Belo Horizonte',
-	},
-	{ code: 3, label: 'Rio de Janeiro' },
-];
-
-const districts: readonly DistrictType[] = [
-	{ code: 1, label: 'Jardim Primavera' },
-	{
-		code: 2,
-		label: 'Zona Rural',
-	},
-	{ code: 3, label: 'Rio de Janeiro' },
-];
-
-const disabilitiesTypes: readonly DisabilityType[] = [
-	{ code: 1, label: 'Física', icon: '/disabilities/fisica.svg' },
-	{
-		code: 2,
-		label: 'Auditiva',
-		icon: '/disabilities/auditiva.svg',
-	},
-	{ code: 3, label: 'Visual', icon: '/disabilities/visual.svg' },
-	{ code: 4, label: 'Intelectual', icon: '/disabilities/intelectual.svg' },
-	{ code: 5, label: 'Autismo', icon: '/disabilities/autismo.svg' },
-	{ code: 6, label: 'Idoso 80+', icon: '/disabilities/idoso80+.svg' },
-];
