@@ -1,12 +1,38 @@
-package com.projetopuc.lazerparatodos.entities;
+package com.projetopuc.lazerparatodos.models.entities;
 
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "comentario_table")
 public class Comentario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+    @Column(name="comentario", nullable = false)
     String comentario;
+    @Column(name="avaliacao", nullable = false)
     Double avaliacao;
-    Deficiencia[] deficiencias;
+    @OneToMany
+    @JoinColumn(name = "deficiencias_id")
+    List<Deficiencia> deficiencias;
+    @ManyToOne
+    @JoinColumn(name = "pcd_id")
     Pcd pcd;
+    @ManyToOne
+    @JoinColumn(name = "proprietario_id")
     Proprietario proprietario;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getComentario() {
         return comentario;
@@ -24,11 +50,11 @@ public class Comentario {
         this.avaliacao = avaliacao;
     }
 
-    public Deficiencia[] getDeficiencias() {
+    public List<Deficiencia> getDeficiencias() {
         return deficiencias;
     }
 
-    public void setDeficiencias(Deficiencia[] deficiencias) {
+    public void setDeficiencias(List<Deficiencia> deficiencias) {
         this.deficiencias = deficiencias;
     }
 

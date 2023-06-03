@@ -1,10 +1,31 @@
-package com.projetopuc.lazerparatodos.entities;
+package com.projetopuc.lazerparatodos.models.entities;
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "endereco_table")
 public class Endereco {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    @Column(name="bairro", nullable = false)
     String bairro;
+    @Column(name="cidade", nullable = false)
     String cidade;
+    @Column(name="estado", nullable = false)
     String estado;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getBairro() {
         return bairro;
