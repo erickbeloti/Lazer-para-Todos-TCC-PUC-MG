@@ -2,9 +2,11 @@ import {
 	Avatar,
 	Box,
 	Button,
+	ClickAwayListener,
 	Container,
 	IconButton,
 	Paper,
+	Tooltip,
 	Typography,
 } from '@mui/material';
 import Head from 'next/head';
@@ -18,6 +20,7 @@ import Idoso80Svg from '../../../../public/disabilities/idoso80.svg';
 import IntelectualSvg from '../../../../public/disabilities/intelectual.svg';
 import VisualSvg from '../../../../public/disabilities/visual.svg';
 import EditIcon from '@mui/icons-material/Edit';
+import { useState } from 'react';
 
 const items = [
 	{
@@ -41,33 +44,86 @@ interface Item {
 }
 
 function Item(props: Item) {
+	const [openTooltipEdit, setOpenTooltipEdit] = useState(false);
+	const [openTooltipAvatar, setOpenTooltipAvatar] = useState(false);
+
+	const handleTooltipEditClose = () => {
+		setOpenTooltipEdit(false);
+	};
+
+	const handleTooltipEditOpen = () => {
+		setOpenTooltipEdit(true);
+	};
+
+	const handleTooltipAvatarClose = () => {
+		setOpenTooltipAvatar(false);
+	};
+
+	const handleTooltipAvatarOpen = () => {
+		setOpenTooltipAvatar(true);
+	};
+
 	return (
 		<Box position={'relative'} height={300}>
 			<Box position={'absolute'} top={15} left={15}>
-				<IconButton>
-					<Avatar
-						alt="Pão e Prosa"
-						src="/companies/1/1.png"
-						sx={{
-							width: 80,
-							height: 80,
-							zIndex: 5,
-							border: 2,
-						}}
-					/>
-				</IconButton>
+				<ClickAwayListener onClickAway={handleTooltipAvatarClose}>
+					<div>
+						<Tooltip
+							PopperProps={{
+								disablePortal: true,
+							}}
+							onClose={handleTooltipAvatarClose}
+							open={openTooltipAvatar}
+							disableFocusListener
+							disableHoverListener
+							disableTouchListener
+							title="Função não implementada"
+							placement="right"
+						>
+							<IconButton onClick={handleTooltipAvatarOpen}>
+								<Avatar
+									alt="Pão e Prosa"
+									src="/companies/1/1.png"
+									sx={{
+										width: 80,
+										height: 80,
+										zIndex: 5,
+										border: 2,
+									}}
+								/>
+							</IconButton>
+						</Tooltip>
+					</div>
+				</ClickAwayListener>
 			</Box>
 			<Image src={props.item.url} alt="logo" fill priority />
 			<Box position={'absolute'} bottom={4} right={4}>
-				<IconButton
-					onClick={() => console.log(props.item.url)}
-					sx={{
-						':hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
-						color: '#fff',
-					}}
-				>
-					<EditIcon sx={{ fontSize: 48 }} />
-				</IconButton>
+				<ClickAwayListener onClickAway={handleTooltipEditClose}>
+					<div>
+						<Tooltip
+							PopperProps={{
+								disablePortal: true,
+							}}
+							onClose={handleTooltipEditClose}
+							open={openTooltipEdit}
+							disableFocusListener
+							disableHoverListener
+							disableTouchListener
+							title="Função não implementada"
+							placement="left"
+						>
+							<IconButton
+								onClick={handleTooltipEditOpen}
+								sx={{
+									':hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
+									color: '#fff',
+								}}
+							>
+								<EditIcon sx={{ fontSize: 48 }} />
+							</IconButton>
+						</Tooltip>
+					</div>
+				</ClickAwayListener>
 			</Box>
 		</Box>
 	);
@@ -176,7 +232,12 @@ export default function Index() {
 						</Typography>
 
 						<Box position={'absolute'} bottom={4} right={4}>
-							<EditIcon sx={{ fontSize: 48 }} />
+							<IconButton
+								sx={{ color: 'black' }}
+								onClick={() => console.log('Editar proprietário')}
+							>
+								<EditIcon sx={{ fontSize: 48 }} />
+							</IconButton>
 						</Box>
 					</Box>
 				</Paper>
