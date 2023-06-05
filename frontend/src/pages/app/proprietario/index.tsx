@@ -44,21 +44,29 @@ function Item(props: Item) {
 	return (
 		<Box position={'relative'} height={300}>
 			<Box position={'absolute'} top={15} left={15}>
-				<Avatar
-					alt="Pão e Prosa"
-					src="/companies/1/1.png"
-					sx={{
-						width: 80,
-						height: 80,
-						zIndex: 5,
-						border: 2,
-					}}
-				/>
+				<IconButton>
+					<Avatar
+						alt="Pão e Prosa"
+						src="/companies/1/1.png"
+						sx={{
+							width: 80,
+							height: 80,
+							zIndex: 5,
+							border: 2,
+						}}
+					/>
+				</IconButton>
 			</Box>
 			<Image src={props.item.url} alt="logo" fill priority />
 			<Box position={'absolute'} bottom={4} right={4}>
-				<IconButton onClick={() => console.log(props.item.url)}>
-					<EditIcon sx={{ fontSize: 48, color: '#fff' }} />
+				<IconButton
+					onClick={() => console.log(props.item.url)}
+					sx={{
+						':hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
+						color: '#fff',
+					}}
+				>
+					<EditIcon sx={{ fontSize: 48 }} />
 				</IconButton>
 			</Box>
 		</Box>
