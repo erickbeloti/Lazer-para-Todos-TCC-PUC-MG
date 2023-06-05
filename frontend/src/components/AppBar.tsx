@@ -52,7 +52,12 @@ export default function MyAppBar() {
 
 				{status === 'authenticated' && !showButtonAppBar && (
 					<Box sx={{ flexGrow: 0 }}>
-						<Box display={'flex'} flexDirection={'column'}>
+						<Box
+							display={'flex'}
+							flexDirection={'column'}
+							justifyContent={'center'}
+							alignItems={'center'}
+						>
 							<Tooltip title="Configurações">
 								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 									<Avatar
