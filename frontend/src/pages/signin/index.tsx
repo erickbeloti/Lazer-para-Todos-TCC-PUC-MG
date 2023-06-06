@@ -20,6 +20,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 interface FormData {
 	email: string;
@@ -104,117 +105,122 @@ export default function SignIn() {
 	}
 
 	return (
-		<Container component="main" maxWidth="xs">
-			<form onSubmit={handleSubmit(onSubmit)} noValidate>
-				<Grid container direction={'column'}>
-					<Box sx={{ alignSelf: 'center', marginTop: 4 }}>
-						<Link href="/" passHref>
-							<Image
-								src="/logo.svg"
-								alt="logo"
-								width="200"
-								height="200"
-								priority
-							/>
-						</Link>
-					</Box>
+		<>
+			<Head>
+				<title>Sign In</title>
+			</Head>
+			<Container component="main" maxWidth="xs">
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+					<Grid container direction={'column'}>
+						<Box sx={{ alignSelf: 'center', marginTop: 4 }}>
+							<Link href="/" passHref>
+								<Image
+									src="/logo.svg"
+									alt="logo"
+									width="200"
+									height="200"
+									priority
+								/>
+							</Link>
+						</Box>
 
-					<Paper
-						variant="outlined"
-						sx={{
-							borderRadius: '15px',
-							border: 0,
-						}}
-					>
 						<Paper
-							square
+							variant="outlined"
 							sx={{
-								backgroundColor: '#1AE6EF',
-								height: 50,
-								display: 'flex',
-								justifyContent: 'center',
-								borderTopLeftRadius: '15px',
-								borderTopRightRadius: '15px',
+								borderRadius: '15px',
+								border: 0,
 							}}
 						>
-							<Grid container justifyContent="center" alignItems="center">
-								<Grid xs>
-									<Typography variant="h5">Login</Typography>
+							<Paper
+								square
+								sx={{
+									backgroundColor: '#1AE6EF',
+									height: 50,
+									display: 'flex',
+									justifyContent: 'center',
+									borderTopLeftRadius: '15px',
+									borderTopRightRadius: '15px',
+								}}
+							>
+								<Grid container justifyContent="center" alignItems="center">
+									<Grid xs>
+										<Typography variant="h5">Login</Typography>
+									</Grid>
 								</Grid>
+							</Paper>
+
+							<Grid container direction={'column'}>
+								<Controller
+									name="email"
+									control={control}
+									render={({ field }) => (
+										<TextField
+											{...field}
+											required
+											label="Email"
+											variant="standard"
+											type="email"
+											sx={{
+												marginTop: '10px',
+												marginLeft: '50px',
+												marginRight: '50px',
+											}}
+											inputProps={{ autoComplete: 'username' }}
+											error={!!errors.email}
+											helperText={errors.email?.message}
+										/>
+									)}
+								/>
+
+								<Controller
+									name="password"
+									control={control}
+									render={({ field }) => (
+										<TextField
+											{...field}
+											required
+											label="Senha"
+											variant="standard"
+											type="password"
+											sx={{
+												marginTop: '4px',
+												marginLeft: '50px',
+												marginRight: '50px',
+												marginBottom: '40px',
+											}}
+											inputProps={{ autoComplete: 'password' }}
+											error={!!errors.password}
+											helperText={errors.password?.message}
+										/>
+									)}
+								/>
 							</Grid>
+
+							<Collapse in={openError}>
+								<Alert severity="error">
+									Email ou senha inválidos.{' '}
+									<strong>Confira suas credenciais</strong>
+								</Alert>
+							</Collapse>
 						</Paper>
-
-						<Grid container direction={'column'}>
-							<Controller
-								name="email"
-								control={control}
-								render={({ field }) => (
-									<TextField
-										{...field}
-										required
-										label="Email"
-										variant="standard"
-										type="email"
-										sx={{
-											marginTop: '10px',
-											marginLeft: '50px',
-											marginRight: '50px',
-										}}
-										inputProps={{ autoComplete: 'username' }}
-										error={!!errors.email}
-										helperText={errors.email?.message}
-									/>
-								)}
-							/>
-
-							<Controller
-								name="password"
-								control={control}
-								render={({ field }) => (
-									<TextField
-										{...field}
-										required
-										label="Senha"
-										variant="standard"
-										type="password"
-										sx={{
-											marginTop: '4px',
-											marginLeft: '50px',
-											marginRight: '50px',
-											marginBottom: '40px',
-										}}
-										inputProps={{ autoComplete: 'password' }}
-										error={!!errors.password}
-										helperText={errors.password?.message}
-									/>
-								)}
-							/>
-						</Grid>
-
-						<Collapse in={openError}>
-							<Alert severity="error">
-								Email ou senha inválidos.{' '}
-								<strong>Confira suas credenciais</strong>
-							</Alert>
-						</Collapse>
-					</Paper>
-					<Typography sx={{ alignSelf: 'center', marginTop: 0.5 }}>
-						Esqueceu sua senha?
-					</Typography>
-					<Button
-						variant="contained"
-						sx={{
-							marginTop: 2.5,
-							width: 128,
-							alignSelf: 'center',
-						}}
-						type="submit"
-						disabled={isSubmitting}
-					>
-						Entrar
-					</Button>
-				</Grid>
-			</form>
-		</Container>
+						<Typography sx={{ alignSelf: 'center', marginTop: 0.5 }}>
+							Esqueceu sua senha?
+						</Typography>
+						<Button
+							variant="contained"
+							sx={{
+								marginTop: 2.5,
+								width: 128,
+								alignSelf: 'center',
+							}}
+							type="submit"
+							disabled={isSubmitting}
+						>
+							Entrar
+						</Button>
+					</Grid>
+				</form>
+			</Container>
+		</>
 	);
 }

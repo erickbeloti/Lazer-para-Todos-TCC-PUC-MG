@@ -29,7 +29,11 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
 			return NextResponse.redirect(url);
 		}
 
-		if (token.userRole === 'pcd' && !pathname.startsWith('/app/pcd')) {
+		if (
+			token.userRole === 'pcd' &&
+			!pathname.startsWith('/app/pcd') &&
+			!pathname.startsWith('/app/estabelecimento')
+		) {
 			const url = new URL(`/403`, request.url);
 
 			return NextResponse.rewrite(url);
@@ -43,7 +47,8 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
 
 		if (
 			token.userRole === 'proprietario' &&
-			!pathname.startsWith('/app/proprietario')
+			!pathname.startsWith('/app/proprietario') &&
+			!pathname.startsWith('/app/estabelecimento')
 		) {
 			const url = new URL(`/403`, request.url);
 
