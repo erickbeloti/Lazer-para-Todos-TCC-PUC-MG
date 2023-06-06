@@ -27,7 +27,12 @@ public class Proprietario {
     @OneToMany
     @JoinColumn(name = "imagens_id")
     List<Imagem> imagens;
-
+    @OneToMany
+    @JoinColumn(name = "favoritos_id")
+    List<Pcd> favoritos;
+    @OneToMany
+    @JoinColumn(name = "deficiencias_id")
+    List<Deficiencia> deficiencias;
     @OneToMany
     @JoinColumn(name = "comentarios_id")
     List<Comentario> comentarios;
@@ -40,7 +45,6 @@ public class Proprietario {
     @JoinColumn(name = "deficiencias_prop_id")
     List<Deficiencia> deficiencias;
 
-
     public Proprietario() {
     }
     public Proprietario(String nomeEstabelecimento, String logadouro, String telefone, String descricao, String urlIcone
@@ -51,6 +55,8 @@ public class Proprietario {
         this.descricao = descricao;
         this.urlIcone = urlIcone;
         this.imagens = imagens;
+        this.favoritos = favoritos;
+        this.deficiencias = deficiencias;
         this.comentarios = comentarios;
     }
 
@@ -108,6 +114,18 @@ public class Proprietario {
 
     public void setImagens(List<Imagem> imagens) { this.imagens = imagens;
     }
+
+    public List<Pcd> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<Pcd> favoritos) {
+        this.favoritos = favoritos;
+    }
+
+    public List<Deficiencia> getDeficiencias() { return deficiencias; }
+
+    public void setDeficiencias(List<Deficiencia> deficiencias) { this.deficiencias = deficiencias; }
 
     public List<Comentario> getComentarios() {
         return comentarios;

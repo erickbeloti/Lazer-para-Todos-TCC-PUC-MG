@@ -45,6 +45,23 @@ public class ProprietarioController {
 
     @PutMapping(path = "/{id}")
     public @ResponseBody Proprietario updateProprietario(Proprietario proprietario){
+
+    /*@GetMapping(path = "/{name}")
+    public List<Proprietario> getProprietariosbyName(@PathVariable String name){
+        Proprietario proprietario = proprietarioRepository.findBy()
+
+        return null;
+    }*/
+
+    @GetMapping(path = "/{id}")
+    public Proprietario getProprietarioById(@PathVariable int id){
+        Optional<Proprietario> proprietario = proprietarioRepository.findById(id);
+            return proprietario.stream().findFirst().get();
+
+    }
+
+    @PostMapping
+    public @ResponseBody Proprietario saveProprietario(Proprietario proprietario){
         proprietarioRepository.save(proprietario);
         return proprietario;
     }

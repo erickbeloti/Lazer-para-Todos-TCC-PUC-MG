@@ -1,7 +1,6 @@
 package com.projetopuc.lazerparatodos.models.entities;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -48,5 +47,4 @@ public class Deficiencia {
     public void setUrlIcone(String urlIcone) {
         this.urlIcone = urlIcone;
     }
-
 }

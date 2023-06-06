@@ -18,6 +18,14 @@ public class Pcd {
     @JoinColumn(name = "favoritos_pcd_id")
     List<Proprietario> favoritos;
 
+    @OneToMany
+    @JoinColumn(name = "favoritos_id")
+    List<Proprietario> favoritos;
+    @OneToMany
+    @JoinColumn(name = "deficiencias_id")
+    @Column(name="deficiencias", nullable = false)
+    List<Deficiencia> deficiencias;
+
     @OneToOne
     @JoinColumn(name = "endereco_id")
     Endereco endereco;
@@ -29,7 +37,6 @@ public class Pcd {
     @OneToMany
     @JoinColumn(name = "deficiencias_pcd_id")
     List<Deficiencia> deficiencias;
-
 
     public int getId() {
         return id;
@@ -53,6 +60,14 @@ public class Pcd {
 
     public void setFavoritos(List<Proprietario> favoritos) {
         this.favoritos = favoritos;
+    }
+
+    public List<Deficiencia> getDeficiencias() {
+        return deficiencias;
+    }
+
+    public void setDeficiencias(List<Deficiencia> deficiencias) {
+        this.deficiencias = deficiencias;
     }
 
     public Endereco getEndereco() {
