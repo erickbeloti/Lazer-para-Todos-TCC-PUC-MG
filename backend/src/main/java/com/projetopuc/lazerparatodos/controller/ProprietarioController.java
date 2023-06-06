@@ -31,13 +31,16 @@ public class ProprietarioController {
     }
 
     @GetMapping(path = "/filter/{nome}")
-    public List<Proprietario> getProprietariosbyName(@PathVariable String nome){
+    public List<Proprietario> getProprietariosbyNome(@PathVariable String nome){
         return proprietarioRepository.findBynomeEstabelecimento(nome);
     }
 
-    @GetMapping(path = "/filteravancado/{nome}/{local}")
-    public List<Proprietario>getProprietarioFiltroAvancado(@PathVariable String nome, @PathVariable String local){
-        return proprietarioRepository.findProprieratioByfilter(nome, local);
+    @GetMapping(path = "/filteravancado")
+    public List<Proprietario>getProprietarioFiltroAvancado(@RequestParam(required = false) String nome,
+                                                           @RequestParam(required = false) String estado,
+                                                           @RequestParam(required = false) String bairro,
+                                                           @RequestParam(required = false) String cidade){
+        return proprietarioRepository.findProprieratioByfilter(nome, estado, bairro, cidade);
     }
 
     @PutMapping(path = "/{id}")
@@ -47,7 +50,7 @@ public class ProprietarioController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody Proprietario deleteProprietario(Proprietario proprietario){
+    public @ResponseBody Proprietario deleteProprietarioById(Proprietario proprietario){
         proprietarioRepository.delete(proprietario);
         return proprietario;
     }
