@@ -16,7 +16,7 @@ public class Comentario {
     @Column(name="avaliacao", nullable = false)
     Double avaliacao;
     @OneToMany
-    @JoinColumn(name = "deficiencias_id")
+    @JoinColumn(name = "deficiencias_comentario_id")
     List<Deficiencia> deficiencias;
     @ManyToOne
     @JoinColumn(name = "pcd_id")

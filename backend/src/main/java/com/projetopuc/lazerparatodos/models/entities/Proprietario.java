@@ -41,6 +41,10 @@ public class Proprietario {
     @JoinColumn(name = "usuarios_id")
     Usuario usuario;
 
+    @OneToMany
+    @JoinColumn(name = "deficiencias_prop_id")
+    List<Deficiencia> deficiencias;
+
     public Proprietario() {
     }
     public Proprietario(String nomeEstabelecimento, String logadouro, String telefone, String descricao, String urlIcone
@@ -145,5 +149,13 @@ public class Proprietario {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public List<Deficiencia> getDeficiencias() {
+        return deficiencias;
+    }
+
+    public void setDeficiencias(List<Deficiencia> deficiencias) {
+        this.deficiencias = deficiencias;
     }
 }

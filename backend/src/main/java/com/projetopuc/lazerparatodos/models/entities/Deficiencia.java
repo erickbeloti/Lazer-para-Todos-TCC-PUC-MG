@@ -1,6 +1,7 @@
 package com.projetopuc.lazerparatodos.models.entities;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "deficiencia_table")
@@ -13,7 +14,6 @@ public class Deficiencia {
     String tipoDeDeficiencia;
     @Column(name="urlIcone", nullable = false)
     String urlIcone;
-
 
     public Deficiencia() {
     }
