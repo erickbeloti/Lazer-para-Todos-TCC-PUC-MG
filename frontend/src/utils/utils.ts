@@ -35,5 +35,5 @@ export const disabilitiesTypes: readonly DisabilityType[] = [
 	{ code: 3, label: 'Visual', icon: '/disabilities/visual.svg' },
 	{ code: 4, label: 'Intelectual', icon: '/disabilities/intelectual.svg' },
 	{ code: 5, label: 'Autismo', icon: '/disabilities/autismo.svg' },
-	{ code: 6, label: 'Idoso 80+', icon: '/disabilities/idoso80+.svg' },
+	{ code: 6, label: 'Idoso 80+', icon: '/disabilities/idoso80.svg' },
 ];

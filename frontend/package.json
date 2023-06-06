@@ -30,10 +30,12 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-imask": "^6.6.1",
+    "react-material-ui-carousel": "^3.4.2",
     "typescript": "5.0.4",
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.0.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "eslint-config-prettier": "^8.8.0",
