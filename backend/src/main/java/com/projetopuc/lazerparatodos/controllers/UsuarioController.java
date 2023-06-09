@@ -1,8 +1,7 @@
-package com.projetopuc.lazerparatodos.controller;
+package com.projetopuc.lazerparatodos.controllers;
 
-import com.projetopuc.lazerparatodos.models.entities.Proprietario;
-import com.projetopuc.lazerparatodos.models.entities.Usuario;
-import com.projetopuc.lazerparatodos.models.repositories.UsuarioRepository;
+import com.projetopuc.lazerparatodos.entities.Usuario;
+import com.projetopuc.lazerparatodos.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
