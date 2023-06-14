@@ -11,8 +11,7 @@ import lombok.Setter;
 @Builder
 @Setter
 @Getter
-public class DeficienciaResponseDto {
-    private Integer id;
-    private String tipoDeDeficiencia;
-    private String urlIcone;
+public class BairroResponseDto {
+    private Integer enderecoId;
+    private String bairro;
 }

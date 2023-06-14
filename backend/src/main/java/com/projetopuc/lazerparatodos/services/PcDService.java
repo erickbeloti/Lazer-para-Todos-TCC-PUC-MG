@@ -1,15 +1,20 @@
 package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.Endereco;
 import com.projetopuc.lazerparatodos.entities.PcD;
 import com.projetopuc.lazerparatodos.repositories.DeficienciaRepository;
 import com.projetopuc.lazerparatodos.repositories.EnderecoRepository;
 import com.projetopuc.lazerparatodos.repositories.PcDRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,18 +32,37 @@ public class PcDService {
     @Autowired
     private PcDMapper pcDMapper;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional
     public PcDCreateResponseDto create(PcDCreateRequestDto pcDCreateRequestDto){
         PcD pcD = pcDMapper.toPcD(pcDCreateRequestDto);
 
         Endereco endereco = enderecoRepository.findById(pcD.getEndereco().getId()).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
-
         List<Deficiencia> deficienciaList = pcD.getDeficiencias().stream().map(deficiencia -> deficienciaRepository.findById(deficiencia.getId()).orElseThrow(() -> new RuntimeException("Deficiência não encontrada"))).toList();
+        pcD.setEndereco(endereco);
+        pcD.setDeficiencias(deficienciaList);
 
         PcD savedPcD = pcdRepository.save(pcD);
-        savedPcD.setEndereco(endereco);
-        savedPcD.setDeficiencias(deficienciaList);
-
         return pcDMapper.toPcDCreateResponseDto(savedPcD);
+    }
+
+    @Transactional
+    public PcDUpdateResponseDto update(PcDUpdateRequestDto pcDUpdateRequestDto, Integer id){
+        PcD existingPcD = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
+        PcD pcD = pcDMapper.toPcD(pcDUpdateRequestDto, existingPcD);
+
+        entityManager.clear();
+
+        Endereco endereco = enderecoRepository.findById(pcD.getEndereco().getId()).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+        List<Deficiencia> deficienciaList = pcD.getDeficiencias().stream().map(deficiencia -> deficienciaRepository.findById(deficiencia.getId()).orElseThrow(() -> new RuntimeException("Deficiência não encontrada"))).toList();
+        pcD.setEndereco(endereco);
+        pcD.setDeficiencias(deficienciaList);
+
+        PcD updatedPcD = pcdRepository.save(pcD);
+
+        return pcDMapper.toPcDUpdateResponseDto(updatedPcD);
     }
 
     public PcDCreateResponseDto findByIdOrElseThrow(Integer id) {

@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "endereco_table")
+@Table(name = "endereco_table", uniqueConstraints = @UniqueConstraint(columnNames = {"estado", "cidade", "bairro"}))
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,6 +32,6 @@ public class Endereco {
     @Column(name="cidade", nullable = false)
     private String cidade;
 
-    @Column(name="estado", nullable = false)
+    @Column(name="estado", length = 2, nullable = false)
     private String estado;
 }
