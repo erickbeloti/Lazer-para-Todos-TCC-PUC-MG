@@ -1,5 +1,7 @@
 package com.projetopuc.lazerparatodos.dtos.request;
 
+import com.projetopuc.lazerparatodos.dtos.response.DeficienciaResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.EnderecoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,3 +20,5 @@ public class PcDUpdateRequestDto {
     private Integer enderecoId;
     private List<Integer> deficienciasIds;
 }
+
+

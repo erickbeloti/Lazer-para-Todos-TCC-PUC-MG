@@ -1,13 +1,21 @@
 package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioCreateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.request.ProprietarioUpdateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.DeficienciaResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.EnderecoResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioCreateResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.ProprietarioUpdateResponseDto;
+import com.projetopuc.lazerparatodos.entities.Comentario;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.Endereco;
 import com.projetopuc.lazerparatodos.entities.Proprietario;
 import com.projetopuc.lazerparatodos.repositories.DeficienciaRepository;
 import com.projetopuc.lazerparatodos.repositories.EnderecoRepository;
 import com.projetopuc.lazerparatodos.repositories.ProprietarioRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +35,9 @@ public class ProprietarioService {
     @Autowired
     private ProprietarioMapper proprietarioMapper;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public ProprietarioCreateResponseDto create(ProprietarioCreateRequestDto proprietarioCreateRequestDto) {
         Proprietario proprietario = proprietarioMapper.toProprietario(proprietarioCreateRequestDto);
 
@@ -40,6 +51,26 @@ public class ProprietarioService {
 
         return proprietarioMapper.toProprietarioCreateResponseDto(savedProprietario);
     }
+
+    @Transactional
+    public ProprietarioUpdateResponseDto update(ProprietarioUpdateRequestDto proprietarioUpdateRequestDto, Integer id){
+        Proprietario existingProprietario = proprietarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
+        Proprietario proprietario = proprietarioMapper.toProprietario(proprietarioUpdateRequestDto, existingProprietario);
+
+        entityManager.clear();
+
+        Endereco endereco = enderecoRepository.findById(proprietario.getEndereco().getId()).orElseThrow(() -> new RuntimeException("Endereço não encxontrado"));
+        List<Deficiencia> deficienciaList = proprietario.getDeficiencias().stream().map(deficiencia -> deficienciaRepository
+                .findById(deficiencia.getId()).orElseThrow(() -> new RuntimeException("Deficiência não encontrada"))).toList();
+
+         proprietario.setEndereco(endereco);
+         proprietario.setDeficiencias(deficienciaList);
+
+         Proprietario updatedProprietario = proprietarioRepository.save(proprietario);
+
+        return proprietarioMapper.toProprietarioUpdateResponseDto(updatedProprietario);
+
+     }
 
     public ProprietarioCreateResponseDto findByIdOrElseThrow(Integer id) {
         Proprietario proprietario = proprietarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
