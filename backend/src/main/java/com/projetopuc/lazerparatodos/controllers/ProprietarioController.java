@@ -1,7 +1,9 @@
 package com.projetopuc.lazerparatodos.controllers;
 
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioCreateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.request.ProprietarioUpdateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioCreateResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.ProprietarioUpdateResponseDto;
 import com.projetopuc.lazerparatodos.entities.Proprietario;
 import com.projetopuc.lazerparatodos.repositories.ProprietarioRepository;
 import com.projetopuc.lazerparatodos.services.ProprietarioService;
@@ -41,6 +43,10 @@ public class ProprietarioController {
                 .toUri();
         return ResponseEntity.created(location).body(createdProprietario);
     }
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<ProprietarioUpdateResponseDto> updateProprietario(@RequestBody ProprietarioUpdateRequestDto proprietarioUpdateRequestDto, @PathVariable Integer id) {
+        return ResponseEntity.ok(proprietarioService.update(proprietarioUpdateRequestDto, id));
+    }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<ProprietarioCreateResponseDto> getProprietarioById(@PathVariable int id) {
@@ -65,14 +71,8 @@ public class ProprietarioController {
         return proprietarioRepository.findProprieratioByfilter(nome, estado, bairro, cidade);
     }
 
-    @PutMapping(path = "/{id}")
-    public @ResponseBody
-    Proprietario updateProprietario(Proprietario proprietario) {
-        return proprietario;
-    }
-
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody
+    public  @ResponseBody
     Proprietario deleteProprietarioById(Proprietario proprietario) {
         proprietarioRepository.delete(proprietario);
         return proprietario;
