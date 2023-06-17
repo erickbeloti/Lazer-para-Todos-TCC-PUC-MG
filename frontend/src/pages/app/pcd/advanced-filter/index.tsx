@@ -177,7 +177,6 @@ export default function AdvancedFilter() {
 										name="rating"
 										control={control}
 										render={({ field }) => {
-											console.log(field);
 											const { onChange } = field;
 											return (
 												<Rating

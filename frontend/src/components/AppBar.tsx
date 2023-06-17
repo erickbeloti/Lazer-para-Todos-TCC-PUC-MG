@@ -30,6 +30,13 @@ export default function MyAppBar() {
 		setAnchorElUser(null);
 	};
 
+	const handleEditRegister = () => {
+		handleCloseUserMenu();
+		if (session?.user.userRole === 'pcd') {
+			router.push(`/app/pcd/edit/${session.user.id}`);
+		}
+	};
+
 	const handleSignOut = () => {
 		handleCloseUserMenu();
 		signOut({ callbackUrl: '/signin' });
@@ -86,7 +93,7 @@ export default function MyAppBar() {
 							open={Boolean(anchorElUser)}
 							onClose={handleCloseUserMenu}
 						>
-							<MenuItem onClick={handleCloseUserMenu}>
+							<MenuItem onClick={handleEditRegister}>
 								<Typography textAlign="center">Editar Cadastro</Typography>
 							</MenuItem>
 							<MenuItem onClick={handleSignOut}>

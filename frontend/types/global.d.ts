@@ -1,24 +1,42 @@
 export {};
 
 declare global {
-	interface StateType {
-		code: string;
-		label: string;
+	interface StateApiType {
+		estado: string;
 	}
 
-	interface CityType {
-		code: number;
-		label: string;
+	interface CityApiType {
+		cidade: string;
 	}
 
-	interface DistrictType {
-		code: number;
-		label: string;
+	interface DistrictApiType {
+		enderecoId: number;
+		bairro: string;
 	}
 
-	interface DisabilityType {
-		code: number;
-		label: string;
-		icon: string;
+	interface DisabilityApiType {
+		id: number;
+		tipoDeDeficiencia: string;
+		urlIcone: string;
+	}
+
+	interface EnderecoApiType {
+		id: number;
+		estado: string;
+		cidade: string;
+		bairro: string;
+	}
+
+	interface DeficienciaApiType {
+		id: number;
+		tipoDeDeficiencia: string;
+	}
+
+	interface PcDUserApiType {
+		id: number;
+		nome: string;
+		email: string;
+		endereco: EnderecoApiType;
+		deficiencias: DeficienciaApiType[];
 	}
 }

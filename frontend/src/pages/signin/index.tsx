@@ -55,8 +55,6 @@ export default function SignIn() {
 	const router = useRouter();
 
 	const onSubmit: SubmitHandler<FormData> = async data => {
-		console.log(data);
-
 		const res = await signIn('credentials', {
 			email: data.email,
 			password: data.password,
