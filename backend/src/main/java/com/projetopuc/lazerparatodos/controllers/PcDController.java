@@ -2,6 +2,7 @@ package com.projetopuc.lazerparatodos.controllers;
 
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.FavoritosResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.entities.PcD;
@@ -51,6 +52,11 @@ public class PcDController {
         return ResponseEntity.ok(pcDService.findByIdOrElseThrow(id));
     }
 
+    @GetMapping(path = "/{ìd}/favoritos")
+    public  ResponseEntity<List<FavoritosResponseDto>> getallFavoritos(@PathVariable Integer id){
+        return ResponseEntity.ok(pcDService.findAllFavoritos(id));
+    }
+
     @GetMapping
     public List<PcD> getallPcd(){
         return pcdRepository.findAll();
@@ -62,7 +68,6 @@ public class PcDController {
         pcdRepository.delete(pcd);
         return pcd;
     }
-
     @Autowired
     PcDRepository pcdRepository;
 }
