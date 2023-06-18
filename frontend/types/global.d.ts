@@ -39,4 +39,15 @@ declare global {
 		endereco: EnderecoApiType;
 		deficiencias: DeficienciaApiType[];
 	}
+
+	interface ProprietarioUserApiType {
+		id: number;
+		nomeEstabelecimento: string;
+		email: string;
+		logradouro: string;
+		endereco: EnderecoApiType;
+		telefone: string;
+		deficiencias: DeficienciaApiType[];
+		descricao: string;
+	}
 }

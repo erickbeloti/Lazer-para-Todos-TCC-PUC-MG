@@ -35,6 +35,9 @@ export default function MyAppBar() {
 		if (session?.user.userRole === 'pcd') {
 			router.push(`/app/pcd/edit/${session.user.id}`);
 		}
+		if (session?.user.userRole === 'proprietario') {
+			router.push(`/app/proprietario/edit/${session.user.id}`);
+		}
 	};
 
 	const handleSignOut = () => {

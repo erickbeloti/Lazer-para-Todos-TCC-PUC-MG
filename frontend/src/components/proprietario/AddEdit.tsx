@@ -1,4 +1,13 @@
 import {
+	useForm,
+	Controller,
+	SubmitHandler,
+	ControllerRenderProps,
+	useWatch,
+} from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import {
 	Autocomplete,
 	Avatar,
 	Box,
@@ -9,35 +18,36 @@ import {
 	Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useForm, Controller, SubmitHandler, useWatch } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { IMaskInput } from 'react-imask';
+import React, { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import { useEffect } from 'react';
-import useSWR from 'swr';
 import api from '@/services/api';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
 import { useSession } from 'next-auth/react';
+import useSWR from 'swr';
+import { mutate } from 'swr';
 
 interface FormData {
-	name: string;
+	companyName: string;
 	email: string;
 	password: string;
+	address: string;
 	state: StateApiType | null;
 	city: CityApiType | null;
 	district: DistrictApiType | null;
+	phone: string;
 	disabilitiesTypes: DisabilityApiType[];
+	description: string;
 }
 
-interface AddEditPcDProps {
+interface AddEditProprietarioProps {
 	title: string;
-	user?: PcDUserApiType;
+	user?: ProprietarioUserApiType;
 }
 
 const schema = yup
 	.object({
-		name: yup.string().required('Nome obrigatório'),
+		companyName: yup.string().required('Nome obrigatório'),
 		email: yup
 			.string()
 			.email('Deve ser um email válido')
@@ -46,6 +56,7 @@ const schema = yup
 			.string()
 			.min(8, 'É necessário no mínimo 8 caracteres')
 			.required('Senha obrigatório'),
+		address: yup.string().required('Endereço obrigatório'),
 		state: yup
 			.object({ estado: yup.string().required('Estado obrigatório') })
 			.required('Estado obrigatório'),
@@ -55,16 +66,44 @@ const schema = yup
 		district: yup
 			.object({ bairro: yup.string().required('Bairro obrigatório') })
 			.required('Bairro obrigatório'),
+		phone: yup
+			.string()
+			.matches(/^\(\d{2}\)\s\d{4}-\d{4}$/, {
+				message: 'Insira um telefone válido',
+				excludeEmptyString: true,
+			})
+			.required('Telefone obrigatório'),
 		disabilitiesTypes: yup
 			.array()
 			.min(1, 'É necessário escolher ao menos uma opção'),
+		description: yup.string().required('Descrição do local obrigatório'),
 	})
 	.required();
+
+const TextMaskCustom = React.forwardRef<HTMLElement, ControllerRenderProps>(
+	function TextMaskCustom(props, ref) {
+		const { onChange, ...other } = props;
+
+		return (
+			<IMaskInput
+				{...other}
+				mask="(00) 0000-0000"
+				inputRef={ref}
+				onChange={onChange}
+				onAccept={value => onChange(value)}
+				overwrite
+			/>
+		);
+	},
+);
 
 const fetcher = ({ url, params }: { url: string; params: unknown }) =>
 	api.get(url, { params }).then(res => res.data);
 
-export default function AddEditPcD({ user, title }: AddEditPcDProps) {
+export default function AddEditProprietario({
+	user,
+	title,
+}: AddEditProprietarioProps) {
 	const router = useRouter();
 	const { update } = useSession();
 	const isAddMode = !user;
@@ -77,9 +116,10 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 	} = useForm<FormData>({
 		resolver: yupResolver(schema),
 		defaultValues: {
-			name: user?.nome || '',
+			companyName: user?.nomeEstabelecimento || '',
 			email: user?.email || '',
 			password: isAddMode ? '' : '********',
+			address: user?.logradouro || '',
 			state: user ? { estado: user?.endereco?.estado } : null,
 			city: user ? { cidade: user?.endereco.cidade } : null,
 			district: user
@@ -88,7 +128,9 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 						bairro: user?.endereco.bairro,
 				  }
 				: null,
+			phone: user?.telefone || '',
 			disabilitiesTypes: user ? user?.deficiencias : [],
+			description: user?.descricao || '',
 		},
 	});
 	const state = useWatch({ control, name: 'state' });
@@ -141,25 +183,28 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 		fetcher,
 	);
 
-	const onSubmit: SubmitHandler<FormData> = async data => {
-		isAddMode ? createPcD(data) : updatePcD(data);
+	const onSubmit: SubmitHandler<FormData> = data => {
+		isAddMode ? createProprietario(data) : updateProprietario(data);
 	};
 
-	const createPcD = async (data: FormData) => {
+	const createProprietario = async (data: FormData) => {
 		try {
-			await api.post('/api/pcds', {
-				nome: data.name,
+			await api.post('/api/proprietarios', {
+				nomeEstabelecimento: data.companyName,
 				email: data.email,
 				senha: data.password,
+				logradouro: data.address,
 				enderecoId: data.district?.enderecoId,
+				telefone: data.phone,
 				deficienciasIds: data.disabilitiesTypes.map(
 					disabilityType => disabilityType.id,
 				),
+				descricao: data.description,
 			});
 
 			router.replace('/signin');
 
-			enqueueSnackbar('Usuário PcD cadastrado com sucesso', {
+			enqueueSnackbar('Usuário Proprietário cadastrado com sucesso', {
 				variant: 'success',
 			});
 
@@ -167,33 +212,36 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 				variant: 'success',
 			});
 		} catch (error) {
-			enqueueSnackbar('Erro ao tentar cadastrar usuário PcD', {
+			enqueueSnackbar('Erro ao tentar cadastrar usuário Proprietário', {
 				variant: 'error',
 			});
 		}
 	};
 
-	const updatePcD = async (data: FormData) => {
+	const updateProprietario = async (data: FormData) => {
 		try {
-			await api.put(`/api/pcds/${user?.id}`, {
-				nome: data.name,
+			await api.put(`/api/proprietarios/${user?.id}`, {
+				nomeEstabelecimento: data.companyName,
+				logradouro: data.address,
 				enderecoId: data.district?.enderecoId,
+				telefone: data.phone,
 				deficienciasIds: data.disabilitiesTypes.map(
 					disabilityType => disabilityType.id,
 				),
+				descricao: data.description,
 			});
 
-			mutate(`/api/pcds/${user?.id}`);
+			mutate(`/api/proprietarios/${user?.id}`);
 
 			update();
 
 			router.replace('/app');
 
-			enqueueSnackbar('Usuário PcD atualizado com sucesso', {
+			enqueueSnackbar('Usuário Proprietário atualizado com sucesso', {
 				variant: 'success',
 			});
 		} catch (error) {
-			enqueueSnackbar('Erro ao tentar atualizar usuário PcD', {
+			enqueueSnackbar('Erro ao tentar atualizar usuário Proprietário', {
 				variant: 'error',
 			});
 		}
@@ -217,23 +265,23 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 							variant="h4"
 							sx={{ textAlign: 'center', fontWeight: 'bold' }}
 						>
-							PcD
+							Proprietário
 						</Typography>
 					</Grid>
 
 					<Grid xs>
 						<Controller
-							name="name"
+							name="companyName"
 							control={control}
 							render={({ field }) => (
 								<TextField
 									{...field}
 									required
 									fullWidth
-									label="Nome"
+									label="Nome do estabelecimento"
 									variant="filled"
-									error={!!errors.name}
-									helperText={errors.name?.message}
+									error={!!errors.companyName}
+									helperText={errors.companyName?.message}
 								/>
 							)}
 						/>
@@ -282,6 +330,24 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 						</Grid>
 					</Grid>
 
+					<Grid xs>
+						<Controller
+							name="address"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									required
+									fullWidth
+									label="Endereço"
+									variant="filled"
+									error={!!errors.address}
+									helperText={errors.address?.message}
+								/>
+							)}
+						/>
+					</Grid>
+
 					<Grid container columnSpacing={2}>
 						<Grid xs={4} md={3}>
 							<Controller
@@ -289,7 +355,7 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<Autocomplete
-										onChange={async (event, item) => {
+										onChange={(event, item) => {
 											onChange(item);
 											setValue('city', null);
 											setValue('district', null);
@@ -408,6 +474,27 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 						</Grid>
 					</Grid>
 
+					<Grid xs>
+						<Controller
+							name="phone"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									required
+									fullWidth
+									label="Telefone para contato"
+									variant="filled"
+									error={!!errors.phone}
+									helperText={errors.phone?.message}
+									InputProps={{
+										inputComponent: TextMaskCustom as typeof IMaskInput,
+									}}
+								/>
+							)}
+						/>
+					</Grid>
+
 					<Grid>
 						<Controller
 							name="disabilitiesTypes"
@@ -441,7 +528,7 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 												autoComplete: 'new-password',
 											}}
 											required
-											label="Tipo de Deficiência"
+											label="Acessibilidades"
 											variant="filled"
 											error={!!errors.disabilitiesTypes}
 											helperText={errors.disabilitiesTypes?.message}
@@ -457,6 +544,26 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 											/>
 										))
 									}
+								/>
+							)}
+						/>
+					</Grid>
+
+					<Grid xs>
+						<Controller
+							name="description"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									required
+									fullWidth
+									label="Descrição do local"
+									multiline
+									minRows={3}
+									variant="filled"
+									error={!!errors.description}
+									helperText={errors.description?.message}
 								/>
 							)}
 						/>

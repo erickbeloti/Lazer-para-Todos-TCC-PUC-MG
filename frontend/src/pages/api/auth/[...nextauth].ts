@@ -69,10 +69,23 @@ const authOptions: NextAuthOptions = {
 			}
 
 			if (trigger === 'update') {
-				const response = await api.get<PcDUserApiType>(`/api/pcds/${token.id}`);
-				const { data: userPcD } = response;
+				if (token.userRole === 'pcd') {
+					const response = await api.get<PcDUserApiType>(
+						`/api/pcds/${token.id}`,
+					);
+					const { data: userPcD } = response;
 
-				return { ...token, name: userPcD.nome };
+					return { ...token, name: userPcD.nome };
+				} else if (token.userRole === 'proprietario') {
+					const response = await api.get<ProprietarioUserApiType>(
+						`/api/proprietarios/${token.id}`,
+					);
+					const { data: userProprietario } = response;
+
+					return { ...token, name: userProprietario.nomeEstabelecimento };
+				}
+
+				return { ...token };
 			}
 
 			return token;
