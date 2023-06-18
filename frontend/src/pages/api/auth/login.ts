@@ -19,7 +19,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 					name: user?.name,
 					email: user?.email,
 					userRole: user?.userRole,
-					exp: Math.floor(Date.now() / 1000) + 5 * 60,
+					exp: Math.floor(Date.now() / 1000) + 30 * 60,
 				},
 				process.env.NEXTAUTH_SECRET || '',
 			);
@@ -42,7 +42,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 					name: user?.name,
 					email: user?.email,
 					userRole: user?.userRole,
-					exp: Math.floor(Date.now() / 1000) + 5 * 60,
+					exp: Math.floor(Date.now() / 1000) + 30 * 60,
 				},
 				process.env.NEXTAUTH_SECRET || '',
 			);

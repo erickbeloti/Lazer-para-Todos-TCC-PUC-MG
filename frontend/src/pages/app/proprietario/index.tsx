@@ -21,6 +21,8 @@ import IntelectualSvg from '../../../../public/disabilities/intelectual.svg';
 import VisualSvg from '../../../../public/disabilities/visual.svg';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const items = [
 	{
@@ -130,6 +132,9 @@ function Item(props: Item) {
 }
 
 export default function Index() {
+	const { data: session } = useSession();
+	const router = useRouter();
+
 	return (
 		<>
 			<Head>
@@ -234,7 +239,9 @@ export default function Index() {
 						<Box position={'absolute'} bottom={4} right={4}>
 							<IconButton
 								sx={{ color: 'black' }}
-								onClick={() => console.log('Editar proprietário')}
+								onClick={() =>
+									router.push(`/app/proprietario/edit/${session?.user.id}`)
+								}
 							>
 								<EditIcon sx={{ fontSize: 48 }} />
 							</IconButton>

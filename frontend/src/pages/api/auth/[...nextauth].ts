@@ -1,3 +1,4 @@
+import api from '@/services/api';
 import axios from 'axios';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
@@ -47,8 +48,9 @@ const authOptions: NextAuthOptions = {
 		}),
 	],
 	callbacks: {
-		async jwt({ token, user }): Promise<JWT> {
+		async jwt({ token, trigger, user }): Promise<JWT> {
 			if (user) {
+				token.id = user.id;
 				token.accessToken = user.accessToken;
 				token.userRole = user.userRole;
 			}
@@ -66,11 +68,33 @@ const authOptions: NextAuthOptions = {
 				}
 			}
 
+			if (trigger === 'update') {
+				if (token.userRole === 'pcd') {
+					const response = await api.get<PcDUserApiType>(
+						`/api/pcds/${token.id}`,
+					);
+					const { data: userPcD } = response;
+
+					return { ...token, name: userPcD.nome };
+				} else if (token.userRole === 'proprietario') {
+					const response = await api.get<ProprietarioUserApiType>(
+						`/api/proprietarios/${token.id}`,
+					);
+					const { data: userProprietario } = response;
+
+					return { ...token, name: userProprietario.nomeEstabelecimento };
+				}
+
+				return { ...token };
+			}
+
 			return token;
 		},
 		async session({ session, token }) {
-			session.accessToken = token.accessToken;
-			session.userRole = token.userRole;
+			session.user.id = token.id;
+			session.user.name = token.name;
+			session.user.accessToken = token.accessToken;
+			session.user.userRole = token.userRole;
 
 			return session;
 		},

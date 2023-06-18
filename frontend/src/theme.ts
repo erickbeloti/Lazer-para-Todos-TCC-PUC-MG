@@ -45,6 +45,9 @@ const theme = createTheme({
 						marginRight: 10,
 						borderRadius: '15px',
 					},
+					'&.Mui-disabled': {
+						backgroundColor: 'rgb(255 255 255 / 50%)',
+					},
 				},
 			},
 		},
