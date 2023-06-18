@@ -2,6 +2,7 @@ package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioUpdateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.FavoritosResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioCreateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioUpdateResponseDto;
@@ -32,4 +33,6 @@ public interface ProprietarioMapper {
                                 @MappingTarget Proprietario existingProprietario);
     @Mapping(source = "usuario.email", target = "email")
     ProprietarioUpdateResponseDto toProprietarioUpdateResponseDto(Proprietario proprietario);
+
+    FavoritosResponseDto toFavoritosResponseDto(Proprietario proprietario);
 }
