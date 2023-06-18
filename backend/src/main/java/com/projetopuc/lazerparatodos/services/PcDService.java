@@ -85,18 +85,7 @@ public class PcDService {
 
         PcD usuarioPcd = pcdRepository.findAllWithFavoritos(id);
 
-        List<Integer> listaProrietarioIds = new ArrayList<>();
-        listaProrietarioIds.add(1);
-        listaProrietarioIds.add(2);
-
-        List<FavoritosResponseDto> listaFavoritos = new ArrayList<>();
-
-        for(Integer proprietarioId : listaProrietarioIds){
-            Proprietario proprietario = proprietarioRepository.findById(proprietarioId).orElseThrow(() -> new RuntimeException("Proprietario não encontrado"));
-            FavoritosResponseDto favorito = proprietarioMapper.toFavoritosResponseDto(proprietario);
-            listaFavoritos.add(favorito);
-       }
-        return listaFavoritos;
+        return proprietarioMapper.toFavoritosResponseDtoList(usuarioPcd.getFavoritos());
     }
 
 
