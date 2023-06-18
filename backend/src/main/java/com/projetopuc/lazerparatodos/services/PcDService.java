@@ -2,20 +2,25 @@ package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.FavoritosResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.Endereco;
 import com.projetopuc.lazerparatodos.entities.PcD;
+import com.projetopuc.lazerparatodos.entities.Proprietario;
 import com.projetopuc.lazerparatodos.repositories.DeficienciaRepository;
 import com.projetopuc.lazerparatodos.repositories.EnderecoRepository;
 import com.projetopuc.lazerparatodos.repositories.PcDRepository;
+import com.projetopuc.lazerparatodos.repositories.ProprietarioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,6 +36,12 @@ public class PcDService {
 
     @Autowired
     private PcDMapper pcDMapper;
+
+    @Autowired
+    private ProprietarioRepository proprietarioRepository;
+
+    @Autowired
+    private ProprietarioMapper proprietarioMapper;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -69,4 +80,12 @@ public class PcDService {
         PcD pcD = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("PcD não encontrado"));
         return pcDMapper.toPcDCreateResponseDto(pcD);
     }
+
+    public List<FavoritosResponseDto> findAllFavoritos(Integer id){
+
+        PcD usuarioPcd = pcdRepository.findAllWithFavoritos(id);
+
+        return proprietarioMapper.toFavoritosResponseDtoList(usuarioPcd.getFavoritos());
+    }
+
 }
