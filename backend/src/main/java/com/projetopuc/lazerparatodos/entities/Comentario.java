@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -20,23 +21,23 @@ public class Comentario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name="comentario", nullable = false)
     private String comentario;
 
-    @Column(name="avaliacao", nullable = false)
-    private Double avaliacao;
+    @Column(name="avaliacao", nullable = false, precision = 4, scale = 2)
+    private BigDecimal avaliacao;
 
     @ManyToMany
     @JoinTable(name = "comentario_deficiencias_table")
     private List<Deficiencia> deficiencias;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pcd_id")
     private PcD pcd;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proprietario_id")
     private Proprietario proprietario;
 }

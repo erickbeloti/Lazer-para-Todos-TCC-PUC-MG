@@ -2,14 +2,13 @@ package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioUpdateRequestDto;
-import com.projetopuc.lazerparatodos.dtos.response.DeficienciaResponseDto;
-import com.projetopuc.lazerparatodos.dtos.response.EnderecoResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioCreateResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.ProprietarioResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioUpdateResponseDto;
-import com.projetopuc.lazerparatodos.entities.Comentario;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.Endereco;
 import com.projetopuc.lazerparatodos.entities.Proprietario;
+import com.projetopuc.lazerparatodos.repositories.ComentarioRepository;
 import com.projetopuc.lazerparatodos.repositories.DeficienciaRepository;
 import com.projetopuc.lazerparatodos.repositories.EnderecoRepository;
 import com.projetopuc.lazerparatodos.repositories.ProprietarioRepository;
@@ -31,6 +30,9 @@ public class ProprietarioService {
 
     @Autowired
     private DeficienciaRepository deficienciaRepository;
+
+    @Autowired
+    private ComentarioRepository comentarioRepository;
 
     @Autowired
     private ProprietarioMapper proprietarioMapper;
@@ -72,8 +74,10 @@ public class ProprietarioService {
 
      }
 
-    public ProprietarioCreateResponseDto findByIdOrElseThrow(Integer id) {
+    public ProprietarioResponseDto findByIdOrElseThrow(Integer id) {
         Proprietario proprietario = proprietarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
-        return proprietarioMapper.toProprietarioCreateResponseDto(proprietario);
+        proprietario.setComentarios(comentarioRepository.findAllByProprietarioId(proprietario.getId()));
+
+        return proprietarioMapper.toProprietarioResponseDto(proprietario);
     }
 }
