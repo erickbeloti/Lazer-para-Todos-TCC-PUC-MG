@@ -88,5 +88,4 @@ public class PcDService {
         return proprietarioMapper.toFavoritosResponseDtoList(usuarioPcd.getFavoritos());
     }
 
-
 }
