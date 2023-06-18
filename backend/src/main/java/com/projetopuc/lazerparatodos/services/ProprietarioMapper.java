@@ -13,6 +13,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ProprietarioMapper {
 
@@ -34,5 +36,5 @@ public interface ProprietarioMapper {
     @Mapping(source = "usuario.email", target = "email")
     ProprietarioUpdateResponseDto toProprietarioUpdateResponseDto(Proprietario proprietario);
 
-    FavoritosResponseDto toFavoritosResponseDto(Proprietario proprietario);
+    List<FavoritosResponseDto> toFavoritosResponseDtoList(List<Proprietario> proprietarios);
 }
