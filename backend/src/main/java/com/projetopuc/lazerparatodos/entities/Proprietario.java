@@ -3,6 +3,7 @@ package com.projetopuc.lazerparatodos.entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -48,12 +49,12 @@ public class Proprietario{
     @Column(name="urlIcone")
     private String urlIcone;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_id", nullable = false)
     private Endereco endereco;
 
     @OneToMany
-    @JoinColumn(name = "imagens_id")
+    @JoinColumn(name = "proprietario_id")
     private List<Imagem> imagens;
 
     @ManyToMany
@@ -63,7 +64,7 @@ public class Proprietario{
     @OneToMany(mappedBy = "proprietario")
     private List<Comentario> comentarios;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "usuarios_id", nullable = false)
     private Usuario usuario;
 }

@@ -3,6 +3,7 @@ package com.projetopuc.lazerparatodos.controllers;
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioUpdateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioCreateResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.ProprietarioResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioUpdateResponseDto;
 import com.projetopuc.lazerparatodos.entities.Proprietario;
 import com.projetopuc.lazerparatodos.repositories.ProprietarioRepository;
@@ -49,7 +50,7 @@ public class ProprietarioController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ProprietarioCreateResponseDto> getProprietarioById(@PathVariable int id) {
+    public ResponseEntity<ProprietarioResponseDto> getProprietarioById(@PathVariable int id) {
         return ResponseEntity.ok(proprietarioService.findByIdOrElseThrow(id));
     }
 
