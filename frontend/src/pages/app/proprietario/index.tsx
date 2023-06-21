@@ -1,7 +1,10 @@
 import {
+	Alert,
 	Avatar,
+	Backdrop,
 	Box,
 	Button,
+	CircularProgress,
 	ClickAwayListener,
 	Container,
 	IconButton,
@@ -13,39 +16,19 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Carousel from 'react-material-ui-carousel';
 import Grid from '@mui/material/Unstable_Grid2';
-import AuditivaSvg from '../../../../public/disabilities/auditiva.svg';
-import AutismoSvg from '../../../../public/disabilities/autismo.svg';
-import FisicaSvg from '../../../../public/disabilities/fisica.svg';
-import Idoso80Svg from '../../../../public/disabilities/idoso80.svg';
-import IntelectualSvg from '../../../../public/disabilities/intelectual.svg';
-import VisualSvg from '../../../../public/disabilities/visual.svg';
 import EditIcon from '@mui/icons-material/Edit';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import api from '@/services/api';
+import DisabilityIcon from '@/components/disability';
 
-const items = [
-	{
-		url: '/companies/1/1.png',
-	},
-	{
-		url: '/companies/1/2.png',
-	},
-	{
-		url: '/companies/1/3.png',
-	},
-	{
-		url: '/companies/1/4.png',
-	},
-];
-
-interface Item {
-	item: {
-		url: string;
-	};
+interface ItemProps {
+	item: ImagemProprietarioUserApiType;
 }
 
-function Item(props: Item) {
+function Item({ item }: ItemProps) {
 	const [openTooltipEdit, setOpenTooltipEdit] = useState(false);
 	const [openTooltipAvatar, setOpenTooltipAvatar] = useState(false);
 
@@ -98,7 +81,7 @@ function Item(props: Item) {
 					</div>
 				</ClickAwayListener>
 			</Box>
-			<Image src={props.item.url} alt="logo" fill priority />
+			<Image src={item.url} alt="logo" fill priority />
 			<Box position={'absolute'} bottom={4} right={4}>
 				<ClickAwayListener onClickAway={handleTooltipEditClose}>
 					<div>
@@ -131,124 +114,148 @@ function Item(props: Item) {
 	);
 }
 
+const fetcher = (url: string) => api.get(url).then(res => res.data);
+
 export default function Index() {
-	const { data: session } = useSession();
 	const router = useRouter();
+	const { data: session } = useSession();
+
+	const {
+		data: proprietario,
+		error,
+		isLoading,
+	} = useSWR<ProprietarioUserApiType>(
+		session ? `/api/proprietarios/${session?.user.id}` : null,
+		fetcher,
+	);
+
+	if (!isLoading && error)
+		return (
+			<Container component="main" maxWidth="sm">
+				<Box m={2}>
+					<Alert severity="error" sx={{ textAlign: 'center' }}>
+						Erro ao tentar recuperar informações do proprietário.
+						<Button href={router.asPath}>Tente novamente</Button>
+					</Alert>
+				</Box>
+			</Container>
+		);
 
 	return (
 		<>
 			<Head>
 				<title>Proprietário</title>
 			</Head>
-			<Container component="main" maxWidth="md">
-				<Box mt={2} />
 
-				<Grid container justifyContent={'center'} mb={1}>
-					<Button
-						variant="contained"
-						color="secondary"
-						sx={{
-							width: 250,
-						}}
-					>
-						Visualizar estabelecimento
-					</Button>
-				</Grid>
-
-				<Paper
-					variant="outlined"
-					sx={{
-						borderRadius: '15px',
-						border: 0,
-						position: 'relative',
-					}}
+			{isLoading && (
+				<Backdrop
+					sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+					open
 				>
-					<Carousel
-						navButtonsAlwaysVisible
-						fullHeightHover={false}
-						sx={{ borderRadius: 3.75 }}
-					>
-						{items.map((item, i) => (
-							<Item key={i} item={item} />
-						))}
-					</Carousel>
+					<CircularProgress color="inherit" />
+				</Backdrop>
+			)}
 
-					<Grid
-						container
-						direction={'column'}
-						justifyContent={'center'}
-						alignContent={'center'}
-					>
-						<Typography variant="h6" fontWeight={700} textAlign={'center'}>
-							Fazenda Harmonia
-						</Typography>
+			{!isLoading && session && (
+				<Container component="main" maxWidth="md">
+					<Box mt={2} />
 
-						<Typography
-							variant="subtitle2"
-							fontWeight={700}
-							color={'rgb(0 0 0 / 41%)'}
-							textAlign={'center'}
+					<Grid container justifyContent={'center'} mb={1}>
+						<Button
+							variant="contained"
+							color="secondary"
+							sx={{
+								width: 250,
+							}}
 						>
-							Estrada da Paz S/N, Zona Rural, Nova Esperança - SP, CEP:
-							12345-678.
-						</Typography>
-
-						<Typography
-							variant="subtitle2"
-							fontWeight={700}
-							color={'rgb(0 0 0 / 41%)'}
-							textAlign={'center'}
-						>
-							(11) 1234-5678
-						</Typography>
+							Visualizar estabelecimento
+						</Button>
 					</Grid>
 
-					<Box p={4} position={'relative'}>
-						<Typography variant="h6" fontWeight={700}>
-							Acessibilidades
-						</Typography>
+					<Paper
+						variant="outlined"
+						sx={{
+							borderRadius: '15px',
+							border: 0,
+							position: 'relative',
+						}}
+					>
+						<Carousel
+							navButtonsAlwaysVisible
+							fullHeightHover={false}
+							sx={{ borderRadius: 3.75 }}
+						>
+							{proprietario?.imagens.map(imagem => (
+								<Item key={imagem.id} item={imagem} />
+							))}
+						</Carousel>
 
-						<FisicaSvg width={40} height={40} />
+						<Grid
+							container
+							direction={'column'}
+							justifyContent={'center'}
+							alignContent={'center'}
+						>
+							<Typography variant="h6" fontWeight={700} textAlign={'center'}>
+								{proprietario?.nomeEstabelecimento}
+							</Typography>
 
-						<VisualSvg width={40} height={40} />
-
-						<AuditivaSvg width={40} height={40} />
-
-						<Idoso80Svg width={40} height={40} />
-
-						<IntelectualSvg width={40} height={40} />
-
-						<AutismoSvg width={40} height={40} />
-
-						<Box mt={2} />
-
-						<Typography variant="h6" fontWeight={700}>
-							Descrição
-						</Typography>
-
-						<Typography variant="subtitle2">
-							A Fazenda Harmonia é um lugar onde pessoas com e sem deficiência
-							podem desfrutar de um ambiente rural acolhedor e inclusivo. Com
-							infraestrutura adaptada e equipe especializada, a fazenda oferece
-							atividades e experiências diversas, como passeios a cavalo,
-							trilhas, jardinagem e artesanato. O objetivo é promover a
-							integração e a igualdade de oportunidades entre todos os
-							visitantes, em um ambiente tranquilo e cheio de harmonia.
-						</Typography>
-
-						<Box position={'absolute'} bottom={4} right={4}>
-							<IconButton
-								sx={{ color: 'black' }}
-								onClick={() =>
-									router.push(`/app/proprietario/edit/${session?.user.id}`)
-								}
+							<Typography
+								variant="subtitle2"
+								fontWeight={700}
+								color={'rgb(0 0 0 / 41%)'}
+								textAlign={'center'}
 							>
-								<EditIcon sx={{ fontSize: 48 }} />
-							</IconButton>
+								{`${proprietario?.logradouro}, ${proprietario?.endereco.bairro}, ${proprietario?.endereco.cidade} - ${proprietario?.endereco.estado}`}
+							</Typography>
+
+							<Typography
+								variant="subtitle2"
+								fontWeight={700}
+								color={'rgb(0 0 0 / 41%)'}
+								textAlign={'center'}
+							>
+								{proprietario?.telefone}
+							</Typography>
+						</Grid>
+
+						<Box p={4} position={'relative'}>
+							<Typography variant="h6" fontWeight={700}>
+								Acessibilidades
+							</Typography>
+
+							<Grid>
+								{proprietario?.deficiencias.map(deficiencia => (
+									<Fragment key={deficiencia.id}>
+										<DisabilityIcon type={deficiencia.tipoDeDeficiencia} />
+									</Fragment>
+								))}
+							</Grid>
+
+							<Box mt={2} />
+
+							<Typography variant="h6" fontWeight={700}>
+								Descrição
+							</Typography>
+
+							<Typography variant="subtitle2">
+								{proprietario?.descricao}
+							</Typography>
+
+							<Box position={'absolute'} bottom={4} right={4}>
+								<IconButton
+									sx={{ color: 'black' }}
+									onClick={() =>
+										router.push(`/app/proprietario/edit/${session?.user.id}`)
+									}
+								>
+									<EditIcon sx={{ fontSize: 48 }} />
+								</IconButton>
+							</Box>
 						</Box>
-					</Box>
-				</Paper>
-			</Container>
+					</Paper>
+				</Container>
+			)}
 		</>
 	);
 }
