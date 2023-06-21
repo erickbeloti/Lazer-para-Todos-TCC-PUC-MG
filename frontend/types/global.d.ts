@@ -32,6 +32,11 @@ declare global {
 		tipoDeDeficiencia: string;
 	}
 
+	interface ImagemProprietarioUserApiType {
+		id: number;
+		url: string;
+	}
+
 	interface PcDUserApiType {
 		id: number;
 		nome: string;
@@ -49,5 +54,6 @@ declare global {
 		telefone: string;
 		deficiencias: DeficienciaApiType[];
 		descricao: string;
+		imagens: ImagemProprietarioUserApiType[];
 	}
 }
