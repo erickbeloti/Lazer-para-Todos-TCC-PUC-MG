@@ -26,4 +26,7 @@ public interface ProprietarioRepository extends JpaRepository<Proprietario, Inte
     List<Proprietario> findProprieratioByfilter(@Param("nome") String nomeEstabelecimento,
                                          @Param("estado") String estado, @Param("bairro") String bairro,
                                                        @Param("cidade") String cidade);
+
+    List<Proprietario> findAllByEnderecoCidade(String cidade);
 }
+

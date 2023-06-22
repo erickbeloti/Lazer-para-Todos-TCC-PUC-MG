@@ -5,6 +5,7 @@ import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.response.FavoritosResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.SugestoesResponseDto;
 import com.projetopuc.lazerparatodos.entities.PcD;
 import com.projetopuc.lazerparatodos.repositories.PcDRepository;
 import com.projetopuc.lazerparatodos.services.PcDService;
@@ -42,9 +43,9 @@ public class PcDController {
         return ResponseEntity.created(location).body(createdPcD);
     }
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<PcDUpdateResponseDto> updatePcD(@RequestBody PcDUpdateRequestDto pcDUpdateRequestDto, @PathVariable Integer id) {
-        return ResponseEntity.ok(pcDService.update(pcDUpdateRequestDto, id));
+    @GetMapping
+    public List<PcD> getallPcd(){
+        return pcdRepository.findAll();
     }
 
     @GetMapping(path = "/{id}")
@@ -52,15 +53,19 @@ public class PcDController {
         return ResponseEntity.ok(pcDService.findByIdOrElseThrow(id));
     }
 
-
     @GetMapping(path = "/{id}/favoritos")
     public  ResponseEntity<List<FavoritosResponseDto>> getallFavoritos(@PathVariable Integer id){
         return ResponseEntity.ok(pcDService.findAllFavoritos(id));
     }
 
-    @GetMapping
-    public List<PcD> getallPcd(){
-        return pcdRepository.findAll();
+    @GetMapping(path = "/{id}/sugestoes")
+    public  ResponseEntity<List<SugestoesResponseDto>> getallSugestoes(@PathVariable Integer id){
+        return ResponseEntity.ok(pcDService.findAllSugestoes(id));
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<PcDUpdateResponseDto> updatePcD(@RequestBody PcDUpdateRequestDto pcDUpdateRequestDto, @PathVariable Integer id) {
+        return ResponseEntity.ok(pcDService.update(pcDUpdateRequestDto, id));
     }
 
     @DeleteMapping(path = "/{id}")
