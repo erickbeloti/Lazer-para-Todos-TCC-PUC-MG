@@ -16,6 +16,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,8 +30,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Proprietario{
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -43,7 +46,7 @@ public class Proprietario{
     @Column(name="telefone", nullable = false)
     private String telefone;
 
-    @Column(name="descricao", nullable = false)
+    @Column(name="descricao", nullable = false, length = 1024)
     private String descricao;
 
     @Column(name="urlIcone")
