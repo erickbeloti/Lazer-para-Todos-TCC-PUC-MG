@@ -1,244 +1,144 @@
-import { Avatar, Box, Button, Container, Typography } from '@mui/material';
+import { AvatarProprietario } from '@/components/proprietario/AvatarProprietario';
+import api from '@/services/api';
+import {
+	Alert,
+	Backdrop,
+	Box,
+	Button,
+	CircularProgress,
+	Container,
+	Typography,
+} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+
+const fetcher = (url: string) => api.get(url).then(res => res.data);
 
 export default function Index() {
+	const router = useRouter();
+	const { data: session } = useSession();
+	const {
+		data: favoritos,
+		error: errorFavoritos,
+		isLoading: isLoadingFavoritos,
+	} = useSWR<FavoritosApiType[]>(
+		session ? `/api/pcds/${session?.user.id}/favoritos` : null,
+		fetcher,
+	);
+
+	const {
+		data: sugestoes,
+		error: errorSugestoes,
+		isLoading: isLoadingSugestoes,
+	} = useSWR<SugestoesApiType[]>(
+		session ? `/api/pcds/${session?.user.id}/sugestoes` : null,
+		fetcher,
+	);
+
+	if (!isLoadingFavoritos && (errorFavoritos || errorSugestoes))
+		return (
+			<Container component="main" maxWidth="sm">
+				<Box m={2}>
+					<Alert severity="error" sx={{ textAlign: 'center' }}>
+						Erro ao tentar recuperar informações do PcD.
+						<Button href={router.asPath}>Tente novamente</Button>
+					</Alert>
+				</Box>
+			</Container>
+		);
+
 	return (
 		<>
-			<Head>Dashboard PcD</Head>
-			<Container component="main" maxWidth="lg">
-				<Box mt={8} />
-				<Grid
-					container
-					spacing={4}
-					justifyContent={'center'}
-					alignItems={'center'}
+			<Head>
+				<title>Dashboard PcD</title>
+			</Head>
+
+			{(isLoadingFavoritos || isLoadingSugestoes) && (
+				<Backdrop
+					sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+					open
 				>
+					<CircularProgress color="inherit" />
+				</Backdrop>
+			)}
+
+			{!isLoadingFavoritos && !isLoadingSugestoes && session && (
+				<Container component="main" maxWidth="lg">
+					<Box mt={8} />
 					<Grid
-						xs={12}
-						sm={12}
-						md={12}
-						lg={12}
-						xl={12}
-						display={'flex'}
-						justifyContent={'end'}
+						container
+						spacing={4}
+						justifyContent={'center'}
+						alignItems={'center'}
 					>
-						<Link href="/app/pcd/advanced-filter" passHref>
-							<Button
-								variant="contained"
-								color="secondary"
-								sx={{
-									width: 200,
-								}}
-							>
-								Filtro Avançado
-							</Button>
-						</Link>
-					</Grid>
-					<Grid xs={12} sm={12} md={12} lg={12} xl={12}>
-						<Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-							Favoritos
-						</Typography>
-					</Grid>
-					<Grid>
-						<Link
-							href="/app/estabelecimento/1"
-							passHref
-							style={{ textDecoration: 'none' }}
+						<Grid
+							xs={12}
+							sm={12}
+							md={12}
+							lg={12}
+							xl={12}
+							display={'flex'}
+							justifyContent={'end'}
 						>
-							<Box
-								display={'flex'}
-								flexDirection={'column'}
-								justifyContent={'center'}
-								alignItems={'center'}
-							>
-								<Avatar
-									alt="Pão e Prosa"
-									src="/companies/1/1.png"
-									sx={{ width: 100, height: 100 }}
-								/>
-								<Typography
-									variant="body1"
-									mt={1}
+							<Link href="/app/pcd/advanced-filter" passHref>
+								<Button
+									variant="contained"
+									color="secondary"
 									sx={{
-										textAlign: 'center',
-										fontWeight: 'bold',
-										color: '#fff',
+										width: 200,
 									}}
 								>
-									Pão e Prosa
-								</Typography>
-							</Box>
-						</Link>
-					</Grid>
-					<Grid>
-						<Box
-							display={'flex'}
-							flexDirection={'column'}
-							justifyContent={'center'}
-							alignItems={'center'}
-						>
-							<Avatar
-								alt="Sabores do Interior"
-								src="/companies/2.png"
-								sx={{ width: 100, height: 100 }}
-							/>
-							<Typography
-								variant="body1"
-								mt={1}
-								sx={{ textAlign: 'center', fontWeight: 'bold' }}
-							>
-								Sabores do Interior
+									Filtro Avançado
+								</Button>
+							</Link>
+						</Grid>
+						<Grid xs={12} sm={12} md={12} lg={12} xl={12}>
+							<Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+								Favoritos
 							</Typography>
-						</Box>
-					</Grid>
-					<Grid>
-						<Box
-							display={'flex'}
-							flexDirection={'column'}
-							justifyContent={'center'}
-							alignItems={'center'}
-						>
-							<Avatar
-								alt="Parque dos Ipês"
-								src="/companies/3.png"
-								sx={{ width: 100, height: 100 }}
-							/>
-							<Typography
-								variant="body1"
-								mt={1}
-								sx={{ textAlign: 'center', fontWeight: 'bold' }}
-							>
-								Parque dos Ipês
-							</Typography>
-						</Box>
-					</Grid>
-					<Grid>
-						<Box
-							display={'flex'}
-							flexDirection={'column'}
-							justifyContent={'center'}
-							alignItems={'center'}
-						>
-							<Avatar
-								alt="Rancho do Vô João"
-								src="/companies/4.png"
-								sx={{ width: 100, height: 100 }}
-							/>
-							<Typography
-								variant="body1"
-								mt={1}
-								sx={{ textAlign: 'center', fontWeight: 'bold' }}
-							>
-								Rancho do Vô João
-							</Typography>
-						</Box>
-					</Grid>
-					<Grid>
-						<Box
-							display={'flex'}
-							flexDirection={'column'}
-							justifyContent={'center'}
-							alignItems={'center'}
-						>
-							<Avatar
-								alt="Parque Aquático Splash"
-								src="/companies/5.png"
-								sx={{ width: 100, height: 100 }}
-							/>
-							<Typography
-								variant="body1"
-								mt={1}
-								sx={{ textAlign: 'center', fontWeight: 'bold' }}
-							>
-								Parque Aquático Splash
-							</Typography>
-						</Box>
-					</Grid>
-				</Grid>
+						</Grid>
 
-				<Box mt={4} />
-
-				<Grid
-					container
-					spacing={4}
-					justifyContent={'center'}
-					alignItems={'center'}
-				>
-					<Grid xs={12} sm={12} md={12} lg={12} xl={12}>
-						<Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-							Explore!
-						</Typography>
+						{favoritos?.map(favorito => (
+							<Grid key={favorito.id}>
+								<AvatarProprietario
+									id={favorito.id}
+									nome={favorito.nomeEstabelecimento}
+									urlIcone={favorito.urlIcone}
+								/>
+							</Grid>
+						))}
 					</Grid>
 
-					<Grid>
-						<Box
-							display={'flex'}
-							flexDirection={'column'}
-							justifyContent={'center'}
-							alignItems={'center'}
-						>
-							<Avatar
-								alt="Fazenda do Vale"
-								src="/companies/6.png"
-								sx={{ width: 100, height: 100 }}
-							/>
-							<Typography
-								variant="body1"
-								mt={1}
-								sx={{ textAlign: 'center', fontWeight: 'bold' }}
-							>
-								Fazenda do Vale
-							</Typography>
-						</Box>
-					</Grid>
+					<Box mt={4} />
 
-					<Grid>
-						<Box
-							display={'flex'}
-							flexDirection={'column'}
-							justifyContent={'center'}
-							alignItems={'center'}
-						>
-							<Avatar
-								alt="Espaço Cultural Atlântico"
-								src="/companies/7.png"
-								sx={{ width: 100, height: 100 }}
-							/>
-							<Typography
-								variant="body1"
-								mt={1}
-								sx={{ textAlign: 'center', fontWeight: 'bold' }}
-							>
-								Espaço Cultural Atlântico
+					<Grid
+						container
+						spacing={4}
+						justifyContent={'center'}
+						alignItems={'center'}
+					>
+						<Grid xs={12} sm={12} md={12} lg={12} xl={12}>
+							<Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+								Explore!
 							</Typography>
-						</Box>
-					</Grid>
+						</Grid>
 
-					<Grid>
-						<Box
-							display={'flex'}
-							flexDirection={'column'}
-							justifyContent={'center'}
-							alignItems={'center'}
-						>
-							<Avatar
-								alt="Fazenda Harmonia"
-								src="/companies/8.png"
-								sx={{ width: 100, height: 100 }}
-							/>
-							<Typography
-								variant="body1"
-								mt={1}
-								sx={{ textAlign: 'center', fontWeight: 'bold' }}
-							>
-								Fazenda Harmonia
-							</Typography>
-						</Box>
+						{sugestoes?.map(sugestao => (
+							<Grid key={sugestao.id}>
+								<AvatarProprietario
+									id={sugestao.id}
+									nome={sugestao.nomeEstabelecimento}
+									urlIcone={sugestao.urlIcone}
+								/>
+							</Grid>
+						))}
 					</Grid>
-				</Grid>
-			</Container>
+				</Container>
+			)}
 		</>
 	);
 }
