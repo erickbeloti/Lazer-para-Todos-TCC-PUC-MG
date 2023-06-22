@@ -56,4 +56,16 @@ declare global {
 		descricao: string;
 		imagens: ImagemProprietarioUserApiType[];
 	}
+
+	interface FavoritosApiType {
+		id: number;
+		nomeEstabelecimento: string;
+		urlIcone: string;
+	}
+
+	interface SugestoesApiType {
+		id: number;
+		nomeEstabelecimento: string;
+		urlIcone: string;
+	}
 }
