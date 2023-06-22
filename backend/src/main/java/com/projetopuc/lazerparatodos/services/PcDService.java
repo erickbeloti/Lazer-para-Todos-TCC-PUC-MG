@@ -94,7 +94,7 @@ public class PcDService {
 
         String cidade = usuarioPcd.getEndereco().getCidade();
 
-        List<Proprietario> proprietariosSelecionados = proprietarioRepository.findProprietariosByCidade(cidade);
+        List<Proprietario> proprietariosSelecionados = proprietarioRepository.findAllByEnderecoCidade(cidade);
 
         return proprietarioMapper.toSugestoesResponseDtoList(proprietariosSelecionados);
 

@@ -27,8 +27,6 @@ public interface ProprietarioRepository extends JpaRepository<Proprietario, Inte
                                          @Param("estado") String estado, @Param("bairro") String bairro,
                                                        @Param("cidade") String cidade);
 
-    @Query("SELECT p FROM Proprietario p JOIN FETCH p.endereco e WHERE e.cidade = :cidade")
-    List<Proprietario> findProprietariosByCidade(@Param("cidade") String cidade);
-
+    List<Proprietario> findAllByEnderecoCidade(String cidade);
 }
 
