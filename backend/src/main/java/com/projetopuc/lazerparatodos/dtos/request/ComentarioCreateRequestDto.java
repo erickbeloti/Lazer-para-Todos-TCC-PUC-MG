@@ -3,6 +3,7 @@ package com.projetopuc.lazerparatodos.dtos.request;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,4 +15,5 @@ public class ComentarioCreateRequestDto {
     private BigDecimal avaliacao;
     private Integer proprietarioId;
     private Integer pcDId;
+    private List<Integer> deficienciaIds;
 }
