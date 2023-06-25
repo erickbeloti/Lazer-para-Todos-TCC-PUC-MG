@@ -18,14 +18,14 @@ public class ComentarioController {
     ComentarioService comentarioService;
 
     @PostMapping
-    public ResponseEntity<ComentarioResponseDto> saveComentario(@RequestBody ComentarioCreateRequestDto comentarioCreateRequestDto) {
+    public ResponseEntity<String> saveComentario(@RequestBody ComentarioCreateRequestDto comentarioCreateRequestDto) {
         ComentarioResponseDto createdComentario = comentarioService.create(comentarioCreateRequestDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(createdComentario.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(createdComentario);
+        return ResponseEntity.created(location).body("Comentario criado com sucesso!");
     }
 
 }
