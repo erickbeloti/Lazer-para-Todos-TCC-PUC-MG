@@ -37,7 +37,7 @@ public class ComentarioService {
     ProprietarioRepository proprietarioRepository;
 
     @Transactional
-    public ComentarioResponseDto create(ComentarioCreateRequestDto comentarioCreateRequestDto){
+    public Comentario create(ComentarioCreateRequestDto comentarioCreateRequestDto){
         Comentario comentario = comentarioMapper.toComentario(comentarioCreateRequestDto);
 
         PcD pcd = pcDRepository.findById(comentario.getPcd().getId()).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
@@ -53,7 +53,7 @@ public class ComentarioService {
 
         Comentario savedComentario = comentarioRepository.save(comentario);
 
-        return comentarioMapper.toComentarioResponseDto(savedComentario);
+        return savedComentario;
     }
 
 }

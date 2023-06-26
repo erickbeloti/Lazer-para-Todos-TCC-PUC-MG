@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ComentarioMapper {
     @Mapping(source = "pcd.nome", target = "nome")
-        ComentarioResponseDto toComentarioResponseDto(Comentario comentario);
+        ComentarioResponseDto toProprietarioCreateResponseDto(Comentario comentario);
 
     @Mapping(source = "proprietarioId", target = "proprietario.id")
     @Mapping(source = "pcDId", target = "pcd.id")
