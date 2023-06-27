@@ -1,118 +1,24 @@
 import {
 	Alert,
-	Avatar,
 	Backdrop,
 	Box,
 	Button,
 	CircularProgress,
-	ClickAwayListener,
 	Container,
 	IconButton,
 	Paper,
-	Tooltip,
 	Typography,
 } from '@mui/material';
 import Head from 'next/head';
-import Image from 'next/image';
-import Carousel from 'react-material-ui-carousel';
 import Grid from '@mui/material/Unstable_Grid2';
 import EditIcon from '@mui/icons-material/Edit';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import api from '@/services/api';
 import DisabilityIcon from '@/components/disability';
-
-interface ItemProps {
-	item: ImagemProprietarioUserApiType;
-}
-
-function Item({ item }: ItemProps) {
-	const [openTooltipEdit, setOpenTooltipEdit] = useState(false);
-	const [openTooltipAvatar, setOpenTooltipAvatar] = useState(false);
-
-	const handleTooltipEditClose = () => {
-		setOpenTooltipEdit(false);
-	};
-
-	const handleTooltipEditOpen = () => {
-		setOpenTooltipEdit(true);
-	};
-
-	const handleTooltipAvatarClose = () => {
-		setOpenTooltipAvatar(false);
-	};
-
-	const handleTooltipAvatarOpen = () => {
-		setOpenTooltipAvatar(true);
-	};
-
-	return (
-		<Box position={'relative'} height={300}>
-			<Box position={'absolute'} top={15} left={15}>
-				<ClickAwayListener onClickAway={handleTooltipAvatarClose}>
-					<div>
-						<Tooltip
-							PopperProps={{
-								disablePortal: true,
-							}}
-							onClose={handleTooltipAvatarClose}
-							open={openTooltipAvatar}
-							disableFocusListener
-							disableHoverListener
-							disableTouchListener
-							title="Função não implementada"
-							placement="right"
-						>
-							<IconButton onClick={handleTooltipAvatarOpen}>
-								<Avatar
-									alt="Pão e Prosa"
-									src="/companies/1/1.png"
-									sx={{
-										width: 80,
-										height: 80,
-										zIndex: 5,
-										border: 2,
-									}}
-								/>
-							</IconButton>
-						</Tooltip>
-					</div>
-				</ClickAwayListener>
-			</Box>
-			<Image src={item.url} alt="logo" fill priority />
-			<Box position={'absolute'} bottom={4} right={4}>
-				<ClickAwayListener onClickAway={handleTooltipEditClose}>
-					<div>
-						<Tooltip
-							PopperProps={{
-								disablePortal: true,
-							}}
-							onClose={handleTooltipEditClose}
-							open={openTooltipEdit}
-							disableFocusListener
-							disableHoverListener
-							disableTouchListener
-							title="Função não implementada"
-							placement="left"
-						>
-							<IconButton
-								onClick={handleTooltipEditOpen}
-								sx={{
-									':hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
-									color: '#fff',
-								}}
-							>
-								<EditIcon sx={{ fontSize: 48 }} />
-							</IconButton>
-						</Tooltip>
-					</div>
-				</ClickAwayListener>
-			</Box>
-		</Box>
-	);
-}
+import ImagemProprietario from '@/components/proprietario/ImageProprietario';
 
 const fetcher = (url: string) => api.get(url).then(res => res.data);
 
@@ -180,15 +86,7 @@ export default function Index() {
 							position: 'relative',
 						}}
 					>
-						<Carousel
-							navButtonsAlwaysVisible
-							fullHeightHover={false}
-							sx={{ borderRadius: 3.75 }}
-						>
-							{proprietario?.imagens.map(imagem => (
-								<Item key={imagem.id} item={imagem} />
-							))}
-						</Carousel>
+						<ImagemProprietario proprietario={proprietario} />
 
 						<Grid
 							container
@@ -225,7 +123,7 @@ export default function Index() {
 							</Typography>
 
 							<Grid>
-								{proprietario?.deficiencias.map(deficiencia => (
+								{proprietario?.deficiencias.map(({ deficiencia }) => (
 									<Fragment key={deficiencia.id}>
 										<DisabilityIcon type={deficiencia.tipoDeDeficiencia} />
 									</Fragment>
