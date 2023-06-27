@@ -77,6 +77,13 @@ public class ProprietarioService {
     public ProprietarioResponseDto findByIdOrElseThrow(Integer id) {
         Proprietario proprietario = proprietarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
         proprietario.setComentarios(comentarioRepository.findAllByProprietarioId(proprietario.getId()));
+        proprietario.setAvaliacaoMedia(comentarioRepository.getAvaliacaoMedia(proprietario.getId()));
+
+        List<Deficiencia> deficienciasConfirmadas = deficienciaRepository.findAllById(comentarioRepository.findDistinctByProprietarioId(proprietario.getId()));
+
+        proprietario.getDeficiencias().forEach(deficiencia -> deficiencia.setConfirmada(
+                deficienciasConfirmadas.contains(deficiencia)
+        ));
 
         return proprietarioMapper.toProprietarioResponseDto(proprietario);
     }
