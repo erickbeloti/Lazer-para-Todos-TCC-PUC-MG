@@ -45,7 +45,7 @@ public class ComentarioService {
 
         List<Deficiencia> deficiencias = new ArrayList<>();
 
-        for (Integer deficienciaId : comentarioCreateRequestDto.getDeficienciaIds()){
+        for (Integer deficienciaId : comentarioCreateRequestDto.getDeficienciasIds()){
             Deficiencia deficiencia = deficienciaRepository.findById(deficienciaId).stream().findFirst().get();
             deficiencias.add(deficiencia);
         }

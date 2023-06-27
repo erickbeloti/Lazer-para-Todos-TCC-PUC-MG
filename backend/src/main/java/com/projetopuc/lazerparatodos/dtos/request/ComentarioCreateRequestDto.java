@@ -15,5 +15,5 @@ public class ComentarioCreateRequestDto {
     private BigDecimal avaliacao;
     private Integer proprietarioId;
     private Integer pcDId;
-    private List<Integer> deficienciaIds;
+    private List<Integer> deficienciasIds;
 }
