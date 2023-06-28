@@ -129,7 +129,9 @@ export default function AddEditProprietario({
 				  }
 				: null,
 			phone: user?.telefone || '',
-			disabilitiesTypes: user ? user?.deficiencias : [],
+			disabilitiesTypes: user
+				? user?.deficiencias.map(({ deficiencia }) => deficiencia)
+				: [],
 			description: user?.descricao || '',
 		},
 	});
