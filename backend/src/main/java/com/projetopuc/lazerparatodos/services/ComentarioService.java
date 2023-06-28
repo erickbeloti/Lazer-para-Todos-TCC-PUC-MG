@@ -1,6 +1,7 @@
 package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.ComentarioCreateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.ComentarioResponseDto;
 import com.projetopuc.lazerparatodos.entities.Comentario;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.PcD;
@@ -32,20 +33,21 @@ public class ComentarioService {
 
 
     @Transactional
-    public Comentario create(ComentarioCreateRequestDto comentarioCreateRequestDto){
+    public ComentarioResponseDto create(ComentarioCreateRequestDto comentarioCreateRequestDto){
         Comentario comentario = comentarioMapper.toComentario(comentarioCreateRequestDto);
 
         PcD pcd = pcDRepository.findById(comentario.getPcd().getId()).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
         comentario.setPcd(pcd);
 
-        List<Deficiencia> deficienciaList = comentarioCreateRequestDto.getDeficienciasIds().stream().map(deficienciasId -> deficienciaRepository
-                .findById(deficienciasId).orElseThrow(() -> new RuntimeException("Deficiência não encontrada"))).toList();
+        List<Deficiencia> deficienciaList = comentario.getDeficiencias().stream().map(deficiencia -> deficienciaRepository
+                .findById(deficiencia.getId()).orElseThrow(() -> new RuntimeException("Deficiência não encontrada"))).toList();
 
         comentario.setDeficiencias(deficienciaList);
 
-         return  comentarioRepository.save(comentario);
-    }
+        Comentario savedComentario = comentarioRepository.save(comentario);
 
+        return comentarioMapper.toProprietarioCreateResponseDto(savedComentario);
+    }
 }
 
 

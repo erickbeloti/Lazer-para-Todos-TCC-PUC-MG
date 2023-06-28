@@ -11,7 +11,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = ComentarioMapper.class)
+@Mapper(componentModel = "spring", uses = {ComentarioMapper.class, DeficienciaMapper.class})
 public interface ProprietarioMapper {
 
     @Mapping(source = "enderecoId", target = "endereco.id")
@@ -20,7 +20,6 @@ public interface ProprietarioMapper {
     @Mapping(target = "usuario.papel", expression = "java(\"proprietario\")")
     @Mapping(source = "deficienciasIds", target = "deficiencias")
     Proprietario toProprietario(ProprietarioCreateRequestDto proprietarioCreateRequestDto);
-    Deficiencia toDeficiencia(Integer id);
 
     @Mapping(source = "usuario.email", target = "email")
     ProprietarioCreateResponseDto toProprietarioCreateResponseDto(Proprietario proprietario);
