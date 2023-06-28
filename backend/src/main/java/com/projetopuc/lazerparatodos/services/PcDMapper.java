@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = DeficienciaMapper.class)
 public interface PcDMapper {
 
     @Mapping(source = "enderecoId", target = "endereco.id")
@@ -19,7 +19,6 @@ public interface PcDMapper {
     @Mapping(target = "usuario.papel", expression = "java(\"pcd\")")
     @Mapping(source = "deficienciasIds", target = "deficiencias")
     PcD toPcD(PcDCreateRequestDto pcDCreateRequestDto);
-    Deficiencia toDeficiencia(Integer id);
 
     @Mapping(source = "usuario.email", target = "email")
     PcDCreateResponseDto toPcDCreateResponseDto(PcD pcD);
