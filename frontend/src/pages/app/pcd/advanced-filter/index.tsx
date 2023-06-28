@@ -1,4 +1,3 @@
-import { cities, disabilitiesTypes, districts, states } from '@/utils/utils';
 import {
 	Autocomplete,
 	Avatar,
@@ -14,24 +13,30 @@ import {
 	Rating,
 	TextField,
 } from '@mui/material';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import Grid from '@mui/material/Unstable_Grid2';
 import Link from 'next/link';
 import Head from 'next/head';
+import api from '@/services/api';
+import useSWR from 'swr';
 
 interface FormData {
-	state: StateType | null;
-	city: CityType | null;
-	district: DistrictType | null;
+	state: StateApiType | null;
+	city: CityApiType | null;
+	district: DistrictApiType | null;
 	rating: number | null;
-	disabilitiesTypes: DisabilityType[];
+	disabilitiesTypes: DisabilityApiType[];
 }
+
+const fetcher = ({ url, params }: { url: string; params: unknown }) =>
+	api.get(url, { params }).then(res => res.data);
 
 export default function AdvancedFilter() {
 	const {
 		handleSubmit,
 		control,
 		formState: { isSubmitting },
+		setValue,
 	} = useForm<FormData>({
 		defaultValues: {
 			state: null,
@@ -41,6 +46,56 @@ export default function AdvancedFilter() {
 			disabilitiesTypes: [],
 		},
 	});
+
+	const {
+		data: states,
+		error: errorStates,
+		isLoading: isLoadingStates,
+	} = useSWR({ url: '/api/enderecos/estados' }, fetcher);
+
+	const {
+		data: cities,
+		error: errorCities,
+		isLoading: isLoadingCities,
+	} = useSWR(
+		() =>
+			state
+				? {
+						url: '/api/enderecos/cidades',
+						params: { estado: state?.estado },
+				  }
+				: null,
+		fetcher,
+	);
+
+	const state = useWatch({ control, name: 'state' });
+	const city = useWatch({ control, name: 'city' });
+
+	const {
+		data: districts,
+		error: errorDistricts,
+		isLoading: isLoadingDistricts,
+	} = useSWR(
+		() =>
+			state && city
+				? {
+						url: '/api/enderecos/bairros',
+						params: { estado: state?.estado, cidade: city?.cidade },
+				  }
+				: null,
+		fetcher,
+	);
+
+	const {
+		data: disabilitiesTypes,
+		error: errorDisabilitiesTypes,
+		isLoading: isLoadingDisabilitiesTypes,
+	} = useSWR(
+		{
+			url: '/api/deficiencias',
+		},
+		fetcher,
+	);
 
 	const onSubmit: SubmitHandler<FormData> = data => console.log(data);
 
@@ -70,15 +125,21 @@ export default function AdvancedFilter() {
 											<Autocomplete
 												onChange={(event, item) => {
 													onChange(item);
+													setValue('city', null);
+													setValue('district', null);
 												}}
 												value={value}
-												options={states}
+												options={
+													!isLoadingStates && !errorStates && states
+														? states
+														: []
+												}
 												autoHighlight
 												getOptionLabel={option =>
-													option.label ? option.label : ''
+													option.estado ? option.estado : ''
 												}
 												isOptionEqualToValue={(option, value) =>
-													value === null || option.code === value.code
+													value === null || option.estado === value.estado
 												}
 												renderInput={params => (
 													<TextField
@@ -104,15 +165,20 @@ export default function AdvancedFilter() {
 											<Autocomplete
 												onChange={(event, item) => {
 													onChange(item);
+													setValue('district', null);
 												}}
 												value={value}
-												options={cities}
+												options={
+													!isLoadingCities && !errorCities && cities
+														? cities
+														: []
+												}
 												autoHighlight
 												getOptionLabel={option =>
-													option.label ? option.label : ''
+													option.cidade ? option.cidade : ''
 												}
 												isOptionEqualToValue={(option, value) =>
-													value === null || option.code === value.code
+													value === null || option.cidade === value.cidade
 												}
 												renderInput={params => (
 													<TextField
@@ -125,6 +191,7 @@ export default function AdvancedFilter() {
 														variant="filled"
 													/>
 												)}
+												disabled={!state}
 											/>
 										)}
 									/>
@@ -142,13 +209,18 @@ export default function AdvancedFilter() {
 													onChange(item);
 												}}
 												value={value}
-												options={districts}
+												options={
+													!isLoadingDistricts && !errorDistricts && districts
+														? districts
+														: []
+												}
 												autoHighlight
 												getOptionLabel={option =>
-													option.label ? option.label : ''
+													option.bairro ? option.bairro : ''
 												}
 												isOptionEqualToValue={(option, value) =>
-													value === null || option.code === value.code
+													value === null ||
+													option.enderecoId === value.enderecoId
 												}
 												renderInput={params => (
 													<TextField
@@ -161,6 +233,7 @@ export default function AdvancedFilter() {
 														variant="filled"
 													/>
 												)}
+												disabled={!city}
 											/>
 										)}
 									/>
@@ -208,13 +281,21 @@ export default function AdvancedFilter() {
 													onChange(item);
 												}}
 												value={value}
-												options={disabilitiesTypes}
+												options={
+													!isLoadingDisabilitiesTypes &&
+													!errorDisabilitiesTypes &&
+													disabilitiesTypes
+														? disabilitiesTypes
+														: []
+												}
 												autoHighlight
 												getOptionLabel={option =>
-													option.label ? option.label : ''
+													option.tipoDeDeficiencia
+														? option.tipoDeDeficiencia
+														: ''
 												}
 												isOptionEqualToValue={(option, value) =>
-													value === null || option.code === value.code
+													value === null || option.id === value.id
 												}
 												renderInput={params => (
 													<TextField
@@ -231,9 +312,9 @@ export default function AdvancedFilter() {
 													value.map((option, index) => (
 														<Chip
 															{...getTagProps({ index })}
-															key={option.code}
-															avatar={<Avatar src={option.icon} />}
-															label={option.label}
+															key={option.id}
+															avatar={<Avatar src={option.urlIcone} />}
+															label={option.tipoDeDeficiencia}
 														/>
 													))
 												}
