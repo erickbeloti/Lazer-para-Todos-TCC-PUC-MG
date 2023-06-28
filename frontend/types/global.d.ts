@@ -32,9 +32,22 @@ declare global {
 		tipoDeDeficiencia: string;
 	}
 
+	interface DeficienciaConfirmadaApiType {
+		deficiencia: DeficienciaApiType;
+		confirmada: boolean;
+	}
+
 	interface ImagemProprietarioUserApiType {
 		id: number;
 		url: string;
+	}
+
+	interface ComentarioApiType {
+		id: number;
+		nome: string;
+		comentario: string;
+		avaliacao: number;
+		deficiencias: DeficienciaApiType[];
 	}
 
 	interface PcDUserApiType {
@@ -52,9 +65,12 @@ declare global {
 		logradouro: string;
 		endereco: EnderecoApiType;
 		telefone: string;
-		deficiencias: DeficienciaApiType[];
+		deficiencias: DeficienciaConfirmadaApiType[];
 		descricao: string;
+		urlIcone: string;
 		imagens: ImagemProprietarioUserApiType[];
+		avaliacaoMedia: number;
+		comentarios: ComentarioApiType[];
 	}
 
 	interface FavoritosApiType {

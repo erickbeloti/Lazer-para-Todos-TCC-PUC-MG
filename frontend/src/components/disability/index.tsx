@@ -7,21 +7,29 @@ import VisualSvg from '../../../public/disabilities/visual.svg';
 
 interface DisabilityIconProps {
 	type: string;
+	elabled?: boolean;
+	size?: number;
 }
 
-export default function DisabilityIcon({ type }: DisabilityIconProps) {
+export default function DisabilityIcon({
+	type,
+	elabled = true,
+	size = 40,
+}: DisabilityIconProps) {
+	const fill = elabled ? '#000' : 'rgb(0 0 0 / 35%)';
+
 	if (type === 'Física') {
-		return <FisicaSvg width={40} height={40} />;
+		return <FisicaSvg fill={fill} width={size} height={size} />;
 	} else if (type === 'Auditiva') {
-		return <VisualSvg width={40} height={40} />;
+		return <VisualSvg fill={fill} width={size} height={size} />;
 	} else if (type === 'Visual') {
-		return <AuditivaSvg width={40} height={40} />;
+		return <AuditivaSvg fill={fill} width={size} height={size} />;
 	} else if (type === 'Intelectual') {
-		return <Idoso80Svg width={40} height={40} />;
+		return <Idoso80Svg fill={fill} width={size} height={size} />;
 	} else if (type === 'Autismo') {
-		return <IntelectualSvg width={40} height={40} />;
+		return <IntelectualSvg fill={fill} width={size} height={size} />;
 	} else if (type === 'Idoso 80+') {
-		return <AutismoSvg width={40} height={40} />;
+		return <AutismoSvg fill={fill} width={size} height={size} />;
 	}
 
 	return null;

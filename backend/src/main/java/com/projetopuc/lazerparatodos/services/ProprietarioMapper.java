@@ -27,6 +27,9 @@ public interface ProprietarioMapper {
     @Mapping(source = "usuario.email", target = "email")
     ProprietarioResponseDto toProprietarioResponseDto(Proprietario proprietario);
 
+    @Mapping(source = ".", target = "deficiencia")
+    ProprietarioResponseDto.DeficienciaConfirmadaResponseDto deficienciaToDeficienciaConfirmadaResponseDto(Deficiencia deficiencia);
+
     @Mapping(source = "enderecoId", target = "endereco.id")
     @Mapping(source = "deficienciasIds", target = "deficiencias")
     Proprietario toProprietario(ProprietarioUpdateRequestDto proprietarioUpdateRequestDto,

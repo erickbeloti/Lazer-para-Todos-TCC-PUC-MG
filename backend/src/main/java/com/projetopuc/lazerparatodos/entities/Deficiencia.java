@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -33,4 +34,7 @@ public class Deficiencia {
 
     @Column(name="urlIcone", nullable = false)
     private String urlIcone;
+
+    @Transient
+    private boolean confirmada;
 }
