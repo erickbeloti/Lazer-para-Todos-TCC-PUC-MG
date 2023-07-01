@@ -2,10 +2,8 @@ package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
-import com.projetopuc.lazerparatodos.dtos.response.FavoritosResponseDto;
-import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
-import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
-import com.projetopuc.lazerparatodos.dtos.response.SugestoesResponseDto;
+import com.projetopuc.lazerparatodos.dtos.request.PcDCreateFavoritoRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.*;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.Endereco;
 import com.projetopuc.lazerparatodos.entities.PcD;
@@ -16,12 +14,10 @@ import com.projetopuc.lazerparatodos.repositories.PcDRepository;
 import com.projetopuc.lazerparatodos.repositories.ProprietarioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -100,4 +96,19 @@ public class PcDService {
 
     }
 
+    public PcDCreateFavoritoResponseDto seguirProprietario (PcDCreateFavoritoRequestDto pcdCreateFavoritoCreateDto, Integer id){
+        PcD usuarioPcd = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
+
+
+        Proprietario proprietarioFavorito = proprietarioRepository.findById(pcdCreateFavoritoCreateDto.getProprietarioId()).
+                 orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
+
+        List<Proprietario> favoritosList = usuarioPcd.getFavoritos();
+
+        favoritosList.add(proprietarioFavorito);
+
+         pcdRepository.save(usuarioPcd);
+
+         return proprietarioMapper.toPcDCreateFavoritoResponseDto(proprietarioFavorito) ;
+    }
 }
