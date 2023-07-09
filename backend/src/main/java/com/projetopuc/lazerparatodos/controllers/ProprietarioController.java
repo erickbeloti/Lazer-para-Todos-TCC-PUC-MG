@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
@@ -64,12 +65,13 @@ public class ProprietarioController {
         return proprietarioRepository.findBynomeEstabelecimento(nome);
     }
 
-    @GetMapping(path = "/filteravancado")
+    @GetMapping(path = "/filtroavancado")
     public List<Proprietario> getProprietarioFiltroAvancado(@RequestParam(required = false) String nome,
                                                             @RequestParam(required = false) String estado,
                                                             @RequestParam(required = false) String bairro,
-                                                            @RequestParam(required = false) String cidade) {
-        return proprietarioRepository.findProprieratioByfilter(nome, estado, bairro, cidade);
+                                                            @RequestParam(required = false) String cidade,
+                                                            @RequestParam(required = false) BigDecimal avMedia) {
+        return proprietarioRepository.findProprieratioByfilter(nome, estado, bairro, cidade, avMedia);
     }
 
     @DeleteMapping(path = "/{id}")
