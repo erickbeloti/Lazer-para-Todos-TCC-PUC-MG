@@ -4,6 +4,7 @@ import com.projetopuc.lazerparatodos.dtos.request.ProprietarioCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioUpdateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioCreateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.ProprietarioSummaryResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioUpdateResponseDto;
 import com.projetopuc.lazerparatodos.entities.Proprietario;
 import com.projetopuc.lazerparatodos.repositories.ProprietarioRepository;
@@ -66,12 +67,14 @@ public class ProprietarioController {
     }
 
     @GetMapping(path = "/filtroavancado")
-    public List<Proprietario> getProprietarioFiltroAvancado(@RequestParam(required = false) String nome,
-                                                            @RequestParam(required = false) String estado,
-                                                            @RequestParam(required = false) String bairro,
-                                                            @RequestParam(required = false) String cidade,
-                                                            @RequestParam(required = false) BigDecimal avMedia) {
-        return proprietarioRepository.findProprieratioByfilter(nome, estado, bairro, cidade, avMedia);
+    public ResponseEntity<List<ProprietarioSummaryResponseDto>> getProprietarioFiltroAvancado(@RequestParam(required = false) String nome,
+                                                                              @RequestParam(required = false) String estado,
+                                                                              @RequestParam(required = false) String cidade,
+                                                                              @RequestParam(required = false) String bairro,
+                                                                              @RequestParam(required = false) BigDecimal avMedia,
+                                                                              @RequestParam(required = false) List<Integer> deficienciasIds) {
+
+        return ResponseEntity.ok(proprietarioService.filtroAvancado(nome, estado, cidade, bairro,  avMedia, deficienciasIds));
     }
 
     @DeleteMapping(path = "/{id}")

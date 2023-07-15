@@ -4,6 +4,7 @@ import com.projetopuc.lazerparatodos.dtos.request.ProprietarioCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioUpdateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioCreateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.ProprietarioSummaryResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioUpdateResponseDto;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.Endereco;
@@ -18,6 +19,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -86,5 +89,16 @@ public class ProprietarioService {
         ));
 
         return proprietarioMapper.toProprietarioResponseDto(proprietario);
+    }
+
+    public List<ProprietarioSummaryResponseDto> filtroAvancado(String nome, String estado, String cidade, String bairro, BigDecimal avMedia, List<Integer> deficienciasIds) {
+
+        if(deficienciasIds == null){
+            deficienciasIds = new ArrayList<>();
+        }
+
+         List<Proprietario> proprietariosList = proprietarioRepository.findProprieratioByfilter(nome, estado, cidade, bairro, avMedia, deficienciasIds);
+
+         return proprietarioMapper.toProprietarioSummaryResponseDtoList(proprietariosList);
     }
 }
