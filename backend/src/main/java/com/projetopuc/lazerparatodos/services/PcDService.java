@@ -16,12 +16,11 @@ import com.projetopuc.lazerparatodos.repositories.PcDRepository;
 import com.projetopuc.lazerparatodos.repositories.ProprietarioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,9 +46,13 @@ public class PcDService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public PcDCreateResponseDto create(PcDCreateRequestDto pcDCreateRequestDto){
         PcD pcD = pcDMapper.toPcD(pcDCreateRequestDto);
+        pcD.getUsuario().setSenha(passwordEncoder.encode(pcD.getUsuario().getPassword()));
 
         Endereco endereco = enderecoRepository.findById(pcD.getEndereco().getId()).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
         List<Deficiencia> deficienciaList = pcD.getDeficiencias().stream().map(deficiencia -> deficienciaRepository.findById(deficiencia.getId()).orElseThrow(() -> new RuntimeException("Deficiência não encontrada"))).toList();

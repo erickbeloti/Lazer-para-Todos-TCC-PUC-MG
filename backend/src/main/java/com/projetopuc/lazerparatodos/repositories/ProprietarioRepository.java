@@ -28,5 +28,7 @@ public interface ProprietarioRepository extends JpaRepository<Proprietario, Inte
                                                        @Param("cidade") String cidade);
 
     List<Proprietario> findAllByEnderecoCidade(String cidade);
+
+    Optional<Proprietario> findByUsuarioId(Integer usuarioId);
 }
 

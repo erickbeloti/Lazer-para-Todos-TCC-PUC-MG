@@ -16,6 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +41,12 @@ public class ProprietarioService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public ProprietarioCreateResponseDto create(ProprietarioCreateRequestDto proprietarioCreateRequestDto) {
         Proprietario proprietario = proprietarioMapper.toProprietario(proprietarioCreateRequestDto);
+        proprietario.getUsuario().setSenha(passwordEncoder.encode(proprietario.getUsuario().getPassword()));
 
         Endereco endereco = enderecoRepository.findById(proprietario.getEndereco().getId()).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 

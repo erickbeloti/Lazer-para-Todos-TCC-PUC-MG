@@ -35,12 +35,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(papel.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + papel.name()));
     }
 
     @Override
     public String getPassword() {
-        return getPassword();
+        return senha;
     }
 
     @Override
