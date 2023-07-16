@@ -39,9 +39,5 @@ public interface ProprietarioMapper {
     @Mapping(source = "usuario.email", target = "email")
     ProprietarioUpdateResponseDto toProprietarioUpdateResponseDto(Proprietario proprietario);
 
-    List<FavoritosResponseDto> toFavoritosResponseDtoList(List<Proprietario> proprietarios);
-
-    List<SugestoesResponseDto> toSugestoesResponseDtoList(List<Proprietario> proprietarios);
-
-    PcDCreateFavoritoResponseDto toPcDCreateFavoritoResponseDto(Proprietario proprietario);
+    List<ProprietarioSummaryResponseDto> toProprietarioSummaryResponseDtoList(List<Proprietario> proprietarios);
 }

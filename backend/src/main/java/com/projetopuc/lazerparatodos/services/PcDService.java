@@ -2,8 +2,8 @@ package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.ProprietarioSummaryResponseDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateFavoritoRequestDto;
-import com.projetopuc.lazerparatodos.dtos.response.*;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.Endereco;
 import com.projetopuc.lazerparatodos.entities.PcD;
@@ -78,21 +78,21 @@ public class PcDService {
         return pcDMapper.toPcDCreateResponseDto(pcD);
     }
 
-    public List<FavoritosResponseDto> findAllFavoritos(Integer id){
+    public List<ProprietarioSummaryResponseDto> findAllFavoritos(Integer id){
 
         PcD usuarioPcd = pcdRepository.findAllWithFavoritos(id);
 
-        return proprietarioMapper.toFavoritosResponseDtoList(usuarioPcd.getFavoritos());
+        return proprietarioMapper.toProprietarioSummaryResponseDtoList(usuarioPcd.getFavoritos());
     }
 
-    public List<SugestoesResponseDto> findAllSugestoes(Integer id){
+    public List<ProprietarioSummaryResponseDto> findAllSugestoes(Integer id){
         PcD usuarioPcd = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
 
         String cidade = usuarioPcd.getEndereco().getCidade();
 
         List<Proprietario> proprietariosSelecionados = proprietarioRepository.findAllByEnderecoCidade(cidade);
 
-        return proprietarioMapper.toSugestoesResponseDtoList(proprietariosSelecionados);
+        return proprietarioMapper.toProprietarioSummaryResponseDtoList(proprietariosSelecionados);
 
     }
 
