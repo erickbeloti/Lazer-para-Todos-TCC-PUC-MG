@@ -2,9 +2,8 @@ package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
-import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
-import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioSummaryResponseDto;
+import com.projetopuc.lazerparatodos.dtos.request.PcDCreateFavoritoRequestDto;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
 import com.projetopuc.lazerparatodos.entities.Endereco;
 import com.projetopuc.lazerparatodos.entities.PcD;
@@ -97,4 +96,19 @@ public class PcDService {
 
     }
 
+    public PcDCreateFavoritoResponseDto seguirProprietario (PcDCreateFavoritoRequestDto pcdCreateFavoritoCreateDto, Integer id){
+        PcD usuarioPcd = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
+
+
+        Proprietario proprietarioFavorito = proprietarioRepository.findById(pcdCreateFavoritoCreateDto.getProprietarioId()).
+                 orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
+
+        List<Proprietario> favoritosList = usuarioPcd.getFavoritos();
+
+        favoritosList.add(proprietarioFavorito);
+
+         pcdRepository.save(usuarioPcd);
+
+         return proprietarioMapper.toPcDCreateFavoritoResponseDto(proprietarioFavorito) ;
+    }
 }

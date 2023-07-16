@@ -1,5 +1,6 @@
 package com.projetopuc.lazerparatodos.services;
 
+import com.projetopuc.lazerparatodos.dtos.request.PcDCreateFavoritoRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.ProprietarioUpdateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.response.*;
@@ -34,6 +35,7 @@ public interface ProprietarioMapper {
     @Mapping(source = "deficienciasIds", target = "deficiencias")
     Proprietario toProprietario(ProprietarioUpdateRequestDto proprietarioUpdateRequestDto,
                                 @MappingTarget Proprietario existingProprietario);
+
     @Mapping(source = "usuario.email", target = "email")
     ProprietarioUpdateResponseDto toProprietarioUpdateResponseDto(Proprietario proprietario);
 
