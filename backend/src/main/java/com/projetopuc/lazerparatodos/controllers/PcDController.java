@@ -3,7 +3,7 @@ package com.projetopuc.lazerparatodos.controllers;
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateFavoritoRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
-import com.projetopuc.lazerparatodos.dtos.response.PcDCreateFavoritoResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDFavoritoResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioSummaryResponseDto;
@@ -45,9 +45,13 @@ public class PcDController {
     }
 
     @PostMapping(path = "/{id}/favoritos")
-    public ResponseEntity<PcDCreateFavoritoResponseDto> saveFavorito(@RequestBody PcDCreateFavoritoRequestDto pcdCreateFavoritoCreateDto,
-                                                                     @PathVariable Integer id){
+    public ResponseEntity<PcDFavoritoResponseDto> saveFavorito(@RequestBody PcDCreateFavoritoRequestDto pcdCreateFavoritoCreateDto,
+                                                               @PathVariable Integer id){
         return ResponseEntity.ok(pcDService.seguirProprietario(pcdCreateFavoritoCreateDto, id));
+    }
+    @DeleteMapping(path = "/{id}/favoritos/{id2}")
+    public ResponseEntity<PcDFavoritoResponseDto> deleteFavorito(@PathVariable Integer id, @PathVariable Integer id2) {
+        return ResponseEntity.ok(pcDService.desseguirProprietario(id, id2));
     }
 
     @GetMapping

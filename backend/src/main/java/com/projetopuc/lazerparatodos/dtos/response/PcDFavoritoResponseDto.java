@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @Setter
 @Getter
-public class PcDCreateFavoritoResponseDto {
+public class PcDFavoritoResponseDto {
     Integer id;
     String nomeEstabelecimento;
 }

@@ -2,7 +2,7 @@ package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
-import com.projetopuc.lazerparatodos.dtos.response.PcDCreateFavoritoResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDFavoritoResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioSummaryResponseDto;
@@ -104,19 +104,34 @@ public class PcDService {
 
     }
 
-    public PcDCreateFavoritoResponseDto seguirProprietario (PcDCreateFavoritoRequestDto pcdCreateFavoritoCreateDto, Integer id){
+    public PcDFavoritoResponseDto seguirProprietario (PcDCreateFavoritoRequestDto pcdCreateFavoritoCreateDto, Integer id){
         PcD usuarioPcd = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
 
 
-        Proprietario proprietarioFavorito = proprietarioRepository.findById(pcdCreateFavoritoCreateDto.getProprietarioId()).
+        Proprietario proprietarioSelecionado = proprietarioRepository.findById(pcdCreateFavoritoCreateDto.getProprietarioId()).
                  orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
 
         List<Proprietario> favoritosList = usuarioPcd.getFavoritos();
 
-        favoritosList.add(proprietarioFavorito);
+        favoritosList.add(proprietarioSelecionado);
 
          pcdRepository.save(usuarioPcd);
 
-         return proprietarioMapper.toPcDCreateFavoritoResponseDto(proprietarioFavorito) ;
+         return proprietarioMapper.toPcDCreateFavoritoResponseDto(proprietarioSelecionado) ;
     }
+    public PcDFavoritoResponseDto desseguirProprietario (Integer idUsuario, Integer idProprietario){
+        PcD usuarioPcd = pcdRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
+
+        Proprietario proprietarioSelecionado = proprietarioRepository.findById(idProprietario).
+                orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
+
+        List<Proprietario> favoritosList = usuarioPcd.getFavoritos();
+
+        favoritosList.remove(proprietarioSelecionado);
+
+        pcdRepository.save(usuarioPcd);
+
+        return proprietarioMapper.toPcDCreateFavoritoResponseDto(proprietarioSelecionado) ;
+    }
+
 }
