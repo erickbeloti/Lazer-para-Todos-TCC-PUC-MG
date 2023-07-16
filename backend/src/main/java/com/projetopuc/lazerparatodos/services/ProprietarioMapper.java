@@ -39,4 +39,6 @@ public interface ProprietarioMapper {
     ProprietarioUpdateResponseDto toProprietarioUpdateResponseDto(Proprietario proprietario);
 
     List<ProprietarioSummaryResponseDto> toProprietarioSummaryResponseDtoList(List<Proprietario> proprietarios);
+
+    PcDCreateFavoritoResponseDto toPcDCreateFavoritoResponseDto(Proprietario proprietario);
 }

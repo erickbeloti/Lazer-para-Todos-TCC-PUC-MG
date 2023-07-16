@@ -2,6 +2,9 @@ package com.projetopuc.lazerparatodos.services;
 
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDCreateFavoritoResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioSummaryResponseDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateFavoritoRequestDto;
 import com.projetopuc.lazerparatodos.entities.Deficiencia;
