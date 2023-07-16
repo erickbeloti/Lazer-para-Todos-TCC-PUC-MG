@@ -7,8 +7,7 @@ import lombok.*;
 @Builder
 @Setter
 @Getter
-public class FavoritosResponseDto {
-    private Integer id;
-    private String nomeEstabelecimento;
-    private String urlIcone;
+public class PcDCreateFavoritoResponseDto {
+    Integer id;
+    String nomeEstabelecimento;
 }

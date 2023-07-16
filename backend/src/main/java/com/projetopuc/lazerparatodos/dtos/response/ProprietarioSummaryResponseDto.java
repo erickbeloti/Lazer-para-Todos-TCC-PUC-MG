@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @Setter
 @Getter
-public class SugestoesResponseDto {
+public class ProprietarioSummaryResponseDto {
     private Integer id;
     private String nomeEstabelecimento;
     private String urlIcone;

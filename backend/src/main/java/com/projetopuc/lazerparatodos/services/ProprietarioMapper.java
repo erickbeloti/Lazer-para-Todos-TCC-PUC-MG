@@ -12,7 +12,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = ComentarioMapper.class, imports = Papel.class)
+@Mapper(componentModel = "spring", imports = Papel.class, uses = {ComentarioMapper.class, DeficienciaMapper.class})
 public interface ProprietarioMapper {
 
     @Mapping(source = "enderecoId", target = "endereco.id")
@@ -21,7 +21,6 @@ public interface ProprietarioMapper {
     @Mapping(target = "usuario.papel", expression = "java(Papel.PROPRIETARIO)")
     @Mapping(source = "deficienciasIds", target = "deficiencias")
     Proprietario toProprietario(ProprietarioCreateRequestDto proprietarioCreateRequestDto);
-    Deficiencia toDeficiencia(Integer id);
 
     @Mapping(source = "usuario.email", target = "email")
     ProprietarioCreateResponseDto toProprietarioCreateResponseDto(Proprietario proprietario);
@@ -39,7 +38,5 @@ public interface ProprietarioMapper {
     @Mapping(source = "usuario.email", target = "email")
     ProprietarioUpdateResponseDto toProprietarioUpdateResponseDto(Proprietario proprietario);
 
-    List<FavoritosResponseDto> toFavoritosResponseDtoList(List<Proprietario> proprietarios);
-
-    List<SugestoesResponseDto> toSugestoesResponseDtoList(List<Proprietario> proprietarios);
+    List<ProprietarioSummaryResponseDto> toProprietarioSummaryResponseDtoList(List<Proprietario> proprietarios);
 }

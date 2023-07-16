@@ -9,4 +9,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface DeficienciaMapper {
     List<DeficienciaResponseDto> toDeficienciaResponseDtoList(List<Deficiencia> deficiencias);
+
+    Deficiencia toDeficiencia(Integer id);
+
 }
