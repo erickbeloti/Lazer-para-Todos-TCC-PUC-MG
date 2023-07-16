@@ -22,7 +22,8 @@ CREATE TABLE usuario_table
     email varchar(255) DEFAULT NULL,
     papel varchar(255) DEFAULT NULL,
     senha varchar(255) DEFAULT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    CONSTRAINT UQ_EMAIL UNIQUE (email)
 );
 
 CREATE TABLE pcd_table

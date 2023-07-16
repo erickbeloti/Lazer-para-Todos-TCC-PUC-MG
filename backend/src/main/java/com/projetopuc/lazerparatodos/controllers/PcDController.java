@@ -1,11 +1,13 @@
 package com.projetopuc.lazerparatodos.controllers;
 
+import com.projetopuc.lazerparatodos.dtos.request.PcDCreateFavoritoRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDCreateRequestDto;
 import com.projetopuc.lazerparatodos.dtos.request.PcDUpdateRequestDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDCreateFavoritoResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDCreateResponseDto;
+import com.projetopuc.lazerparatodos.dtos.response.PcDUpdateResponseDto;
 import com.projetopuc.lazerparatodos.dtos.response.ProprietarioSummaryResponseDto;
-import com.projetopuc.lazerparatodos.dtos.request.PcDCreateFavoritoRequestDto;
 import com.projetopuc.lazerparatodos.entities.PcD;
-import com.projetopuc.lazerparatodos.entities.Proprietario;
 import com.projetopuc.lazerparatodos.repositories.PcDRepository;
 import com.projetopuc.lazerparatodos.services.PcDService;
 import org.springframework.beans.factory.annotation.Autowired;
