@@ -32,10 +32,10 @@ export default function MyAppBar() {
 
 	const handleEditRegister = () => {
 		handleCloseUserMenu();
-		if (session?.user.userRole === 'pcd') {
+		if (session?.user.userRole === 'PCD') {
 			router.push(`/app/pcd/edit/${session.user.id}`);
 		}
-		if (session?.user.userRole === 'proprietario') {
+		if (session?.user.userRole === 'PROPRIETARIO') {
 			router.push(`/app/proprietario/edit/${session.user.id}`);
 		}
 	};

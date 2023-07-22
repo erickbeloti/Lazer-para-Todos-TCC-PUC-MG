@@ -1,5 +1,5 @@
 import AddEditProprietario from '@/components/proprietario/AddEdit';
-import api from '@/services/api';
+import useApiAuth from '@/lib/hooks/useApiAuth';
 import {
 	Alert,
 	Backdrop,
@@ -12,16 +12,16 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
-const fetcher = (url: string) => api.get(url).then(res => res.data);
-
 export default function EditPcD() {
+	const { apiAuth, isLoadingApi } = useApiAuth();
+	const fetcher = (url: string) => apiAuth.get(url).then(res => res.data);
 	const { query, asPath } = useRouter();
 	const { id } = query;
-	const {
-		data: user,
-		error,
-		isLoading,
-	} = useSWR(`/api/proprietarios/${id}`, fetcher);
+
+	const { data: user, error } = useSWR(
+		!isLoadingApi && id ? `/api/proprietarios/${id}` : null,
+		fetcher,
+	);
 
 	if (error)
 		return (
@@ -41,7 +41,7 @@ export default function EditPcD() {
 				<title>Editar Proprietário</title>
 			</Head>
 
-			{isLoading && (
+			{!user && (
 				<Backdrop
 					sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
 					open
@@ -50,7 +50,7 @@ export default function EditPcD() {
 				</Backdrop>
 			)}
 
-			{!isLoading && <AddEditProprietario user={user} title="Salvar" />}
+			{user && <AddEditProprietario user={user} title="Salvar" />}
 		</>
 	);
 }

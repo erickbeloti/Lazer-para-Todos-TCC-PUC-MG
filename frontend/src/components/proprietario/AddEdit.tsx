@@ -21,11 +21,12 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { IMaskInput } from 'react-imask';
 import React, { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import api from '@/services/api';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
 import { mutate } from 'swr';
+import api from '@/lib/api';
+import useApiAuth from '@/lib/hooks/useApiAuth';
 
 interface FormData {
 	companyName: string;
@@ -104,6 +105,7 @@ export default function AddEditProprietario({
 	user,
 	title,
 }: AddEditProprietarioProps) {
+	const { apiAuth } = useApiAuth();
 	const router = useRouter();
 	const { update } = useSession();
 	const isAddMode = !user;
@@ -222,7 +224,7 @@ export default function AddEditProprietario({
 
 	const updateProprietario = async (data: FormData) => {
 		try {
-			await api.put(`/api/proprietarios/${user?.id}`, {
+			await apiAuth.put(`/api/proprietarios/${user?.id}`, {
 				nomeEstabelecimento: data.companyName,
 				logradouro: data.address,
 				enderecoId: data.district?.enderecoId,

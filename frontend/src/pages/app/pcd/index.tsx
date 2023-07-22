@@ -1,5 +1,5 @@
 import { AvatarProprietario } from '@/components/proprietario/AvatarProprietario';
-import api from '@/services/api';
+import useApiAuth from '@/lib/hooks/useApiAuth';
 import {
 	Alert,
 	Backdrop,
@@ -16,9 +16,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
-const fetcher = (url: string) => api.get(url).then(res => res.data);
-
 export default function Index() {
+	const { apiAuth, isLoadingApi } = useApiAuth();
+	const fetcher = (url: string) => apiAuth.get(url).then(res => res.data);
 	const router = useRouter();
 	const { data: session } = useSession();
 	const {
@@ -26,7 +26,7 @@ export default function Index() {
 		error: errorFavoritos,
 		isLoading: isLoadingFavoritos,
 	} = useSWR<FavoritosApiType[]>(
-		session ? `/api/pcds/${session?.user.id}/favoritos` : null,
+		session && !isLoadingApi ? `/api/pcds/${session?.user.id}/favoritos` : null,
 		fetcher,
 	);
 
@@ -35,11 +35,15 @@ export default function Index() {
 		error: errorSugestoes,
 		isLoading: isLoadingSugestoes,
 	} = useSWR<SugestoesApiType[]>(
-		session ? `/api/pcds/${session?.user.id}/sugestoes` : null,
+		session && !isLoadingApi ? `/api/pcds/${session?.user.id}/sugestoes` : null,
 		fetcher,
 	);
 
-	if (!isLoadingFavoritos && (errorFavoritos || errorSugestoes))
+	if (
+		!isLoadingFavoritos &&
+		!isLoadingSugestoes &&
+		(errorFavoritos || errorSugestoes)
+	)
 		return (
 			<Container component="main" maxWidth="sm">
 				<Box m={2}>

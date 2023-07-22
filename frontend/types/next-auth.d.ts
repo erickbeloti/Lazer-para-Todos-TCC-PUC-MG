@@ -7,7 +7,7 @@ declare module 'next-auth/jwt' {
 		id: string;
 		name: string;
 		email: string;
-		userRole: string;
+		userRole: 'PCD' | 'PROPRIETARIO';
 		accessToken: string;
 		error: string;
 	}
@@ -19,7 +19,12 @@ declare module 'next-auth' {
 	}
 
 	interface User {
-		id: string;
+		usuario: {
+			id: string;
+			nome: string;
+			email: string;
+			papel: 'PCD' | 'PROPRIETARIO';
+		};
 		userRole: string;
 		accessToken: string;
 	}
