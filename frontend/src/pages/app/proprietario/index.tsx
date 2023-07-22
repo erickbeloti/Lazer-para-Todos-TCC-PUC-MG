@@ -16,13 +16,13 @@ import { Fragment } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import api from '@/services/api';
 import DisabilityIcon from '@/components/disability';
 import ImagemProprietario from '@/components/proprietario/ImageProprietario';
-
-const fetcher = (url: string) => api.get(url).then(res => res.data);
+import useApiAuth from '@/lib/hooks/useApiAuth';
 
 export default function Index() {
+	const { apiAuth, isLoadingApi } = useApiAuth();
+	const fetcher = (url: string) => apiAuth.get(url).then(res => res.data);
 	const router = useRouter();
 	const { data: session } = useSession();
 
@@ -31,7 +31,7 @@ export default function Index() {
 		error,
 		isLoading,
 	} = useSWR<ProprietarioUserApiType>(
-		session ? `/api/proprietarios/${session?.user.id}` : null,
+		session && !isLoadingApi ? `/api/proprietarios/${session?.user.id}` : null,
 		fetcher,
 	);
 

@@ -23,14 +23,14 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
 			return NextResponse.redirect(url);
 		}
 
-		if (token.userRole === 'pcd' && pathname === '/app') {
+		if (token.userRole === 'PCD' && pathname === '/app') {
 			const url = new URL(`/app/pcd`, request.url);
 
 			return NextResponse.redirect(url);
 		}
 
 		if (
-			token.userRole === 'pcd' &&
+			token.userRole === 'PCD' &&
 			!pathname.startsWith('/app/pcd') &&
 			!pathname.startsWith('/app/estabelecimento')
 		) {
@@ -39,14 +39,14 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
 			return NextResponse.rewrite(url);
 		}
 
-		if (token.userRole === 'proprietario' && pathname === '/app') {
+		if (token.userRole === 'PROPRIETARIO' && pathname === '/app') {
 			const url = new URL(`/app/proprietario`, request.url);
 
 			return NextResponse.redirect(url);
 		}
 
 		if (
-			token.userRole === 'proprietario' &&
+			token.userRole === 'PROPRIETARIO' &&
 			!pathname.startsWith('/app/proprietario') &&
 			!pathname.startsWith('/app/estabelecimento')
 		) {

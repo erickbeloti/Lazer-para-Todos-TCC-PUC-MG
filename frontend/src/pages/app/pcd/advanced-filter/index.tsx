@@ -17,8 +17,8 @@ import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import Grid from '@mui/material/Unstable_Grid2';
 import Link from 'next/link';
 import Head from 'next/head';
-import api from '@/services/api';
 import useSWR from 'swr';
+import api from '@/lib/api';
 
 interface FormData {
 	state: StateApiType | null;

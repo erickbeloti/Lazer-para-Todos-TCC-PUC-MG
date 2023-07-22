@@ -15,10 +15,11 @@ import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import useSWR from 'swr';
-import api from '@/services/api';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import { useSession } from 'next-auth/react';
+import api from '@/lib/api';
+import useApiAuth from '@/lib/hooks/useApiAuth';
 
 interface FormData {
 	name: string;
@@ -65,6 +66,7 @@ const fetcher = ({ url, params }: { url: string; params: unknown }) =>
 	api.get(url, { params }).then(res => res.data);
 
 export default function AddEditPcD({ user, title }: AddEditPcDProps) {
+	const { apiAuth } = useApiAuth();
 	const router = useRouter();
 	const { update } = useSession();
 	const isAddMode = !user;
@@ -175,7 +177,7 @@ export default function AddEditPcD({ user, title }: AddEditPcDProps) {
 
 	const updatePcD = async (data: FormData) => {
 		try {
-			await api.put(`/api/pcds/${user?.id}`, {
+			await apiAuth.put(`/api/pcds/${user?.id}`, {
 				nome: data.name,
 				enderecoId: data.district?.enderecoId,
 				deficienciasIds: data.disabilitiesTypes.map(

@@ -1,4 +1,4 @@
-import api from '@/services/api';
+import api from '@/lib/api';
 import axios from 'axios';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
@@ -20,10 +20,7 @@ const authOptions: NextAuthOptions = {
 
 				try {
 					const user = await axios.post(
-						`${
-							process.env.NEXT_PUBLIC_URL ??
-							`https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-						}/api/auth/login`,
+						`${process.env.NEXT_PUBLIC_URL_BACKEND}/api/auth/login`,
 						{
 							email: email,
 							password: password,
@@ -41,7 +38,6 @@ const authOptions: NextAuthOptions = {
 
 					return null;
 				} catch (e) {
-					console.log(e);
 					throw new Error('invalid credentials');
 				}
 			},
@@ -50,9 +46,11 @@ const authOptions: NextAuthOptions = {
 	callbacks: {
 		async jwt({ token, trigger, user }): Promise<JWT> {
 			if (user) {
-				token.id = user.id;
+				token.id = user.usuario.id;
+				token.email = user.usuario.email;
+				token.name = user.usuario.nome;
+				token.userRole = user.usuario.papel;
 				token.accessToken = user.accessToken;
-				token.userRole = user.userRole;
 			}
 
 			if (token.accessToken) {
@@ -69,16 +67,26 @@ const authOptions: NextAuthOptions = {
 			}
 
 			if (trigger === 'update') {
-				if (token.userRole === 'pcd') {
+				if (token.userRole === 'PCD') {
 					const response = await api.get<PcDUserApiType>(
 						`/api/pcds/${token.id}`,
+						{
+							headers: {
+								Authorization: `Bearer ${token.accessToken}`,
+							},
+						},
 					);
 					const { data: userPcD } = response;
 
 					return { ...token, name: userPcD.nome };
-				} else if (token.userRole === 'proprietario') {
+				} else if (token.userRole === 'PROPRIETARIO') {
 					const response = await api.get<ProprietarioUserApiType>(
 						`/api/proprietarios/${token.id}`,
+						{
+							headers: {
+								Authorization: `Bearer ${token.accessToken}`,
+							},
+						},
 					);
 					const { data: userProprietario } = response;
 

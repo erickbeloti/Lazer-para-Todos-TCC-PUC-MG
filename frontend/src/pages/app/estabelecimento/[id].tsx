@@ -14,23 +14,23 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Head from 'next/head';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
-import api from '@/services/api';
 import ImagemProprietario from '@/components/proprietario/ImageProprietario';
 import DisabilityIcon from '@/components/disability';
 import Comentario from '@/components/proprietario/Comentario';
-
-const fetcher = (url: string) => api.get(url).then(res => res.data);
+import useApiAuth from '@/lib/hooks/useApiAuth';
 
 export default function Estabelecimento() {
 	const { query, asPath } = useRouter();
 	const { id } = query;
+	const { apiAuth, isLoadingApi } = useApiAuth();
+	const fetcher = (url: string) => apiAuth.get(url).then(res => res.data);
 
 	const {
 		data: proprietario,
 		error,
 		isLoading,
 	} = useSWR<ProprietarioUserApiType>(
-		id ? `/api/proprietarios/${id}` : null,
+		id && !isLoadingApi ? `/api/proprietarios/${id}` : null,
 		fetcher,
 	);
 
