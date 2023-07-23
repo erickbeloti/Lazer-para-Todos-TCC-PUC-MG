@@ -6,21 +6,22 @@ import {
 	Chip,
 	Container,
 	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemText,
 	Paper,
 	Rating,
 	TextField,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import Grid from '@mui/material/Unstable_Grid2';
-import Link from 'next/link';
 import Head from 'next/head';
 import useSWR from 'swr';
 import api from '@/lib/api';
+import useApiAuth from '@/lib/hooks/useApiAuth';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import { ItemListProprietario } from '@/components/proprietario/ItemListProprietario';
 
 interface FormData {
+	name: string;
 	state: StateApiType | null;
 	city: CityApiType | null;
 	district: DistrictApiType | null;
@@ -32,6 +33,10 @@ const fetcher = ({ url, params }: { url: string; params: unknown }) =>
 	api.get(url, { params }).then(res => res.data);
 
 export default function AdvancedFilter() {
+	const searchParams = useSearchParams();
+	const router = useRouter();
+	const { apiAuth } = useApiAuth();
+	const fetcherAuth = (url: string) => apiAuth.get(url).then(res => res.data);
 	const {
 		handleSubmit,
 		control,
@@ -39,6 +44,7 @@ export default function AdvancedFilter() {
 		setValue,
 	} = useForm<FormData>({
 		defaultValues: {
+			name: '',
 			state: null,
 			city: null,
 			district: null,
@@ -46,6 +52,9 @@ export default function AdvancedFilter() {
 			disabilitiesTypes: [],
 		},
 	});
+
+	const state = useWatch({ control, name: 'state' });
+	const city = useWatch({ control, name: 'city' });
 
 	const {
 		data: states,
@@ -67,9 +76,6 @@ export default function AdvancedFilter() {
 				: null,
 		fetcher,
 	);
-
-	const state = useWatch({ control, name: 'state' });
-	const city = useWatch({ control, name: 'city' });
 
 	const {
 		data: districts,
@@ -97,7 +103,32 @@ export default function AdvancedFilter() {
 		fetcher,
 	);
 
-	const onSubmit: SubmitHandler<FormData> = data => console.log(data);
+	const { data: estabelecimentos } = useSWR<ProprietarioSummaryApiType[]>(
+		searchParams.toString()
+			? `/api/proprietarios/filtroavancado?${searchParams.toString()}`
+			: null,
+		fetcherAuth,
+	);
+
+	const onSubmit: SubmitHandler<FormData> = data => {
+		router.push(
+			{
+				pathname: '/app/pcd/advanced-filter',
+				query: {
+					nome: data.name,
+					estado: data.state?.estado,
+					cidade: data.city?.cidade,
+					bairro: data.district?.bairro,
+					avMedia: data.rating,
+					deficienciasIds: data.disabilitiesTypes
+						.map(disabilityType => disabilityType.id)
+						.toString(),
+				},
+			},
+			undefined,
+			{ shallow: true },
+		);
+	};
 
 	return (
 		<>
@@ -116,6 +147,21 @@ export default function AdvancedFilter() {
 				>
 					<form onSubmit={handleSubmit(onSubmit)} noValidate>
 						<Grid container direction={'column'} rowSpacing={2}>
+							<Grid xs>
+								<Controller
+									name="name"
+									control={control}
+									render={({ field }) => (
+										<TextField
+											{...field}
+											fullWidth
+											label="Nome Estabelecimento"
+											variant="filled"
+										/>
+									)}
+								/>
+							</Grid>
+
 							<Grid container>
 								<Grid xs={6} md={3}>
 									<Controller
@@ -357,111 +403,15 @@ export default function AdvancedFilter() {
 					}}
 				>
 					<List sx={{ display: 'flex', flexDirection: 'column' }}>
-						<Link
-							href="/app/estabelecimento/1"
-							passHref
-							style={{ textDecoration: 'none' }}
-						>
-							<ListItem sx={{ backgroundColor: '#6B3B82', borderRadius: 15 }}>
-								<ListItemAvatar>
-									<Avatar
-										alt="Pão e Prosa"
-										src="/companies/1/1.png"
-										sx={{ width: 50, height: 50 }}
-									/>
-								</ListItemAvatar>
-								<ListItemText
-									primary="Pão e Prosa"
-									primaryTypographyProps={{ fontWeight: 700 }}
-									sx={{ color: '#fff' }}
+						{estabelecimentos?.map((estabelecimento, index, array) => (
+							<>
+								<ItemListProprietario
+									key={estabelecimento.id}
+									estabelecimento={estabelecimento}
 								/>
-							</ListItem>
-						</Link>
-
-						<Box component="li" m={1} />
-
-						<ListItem sx={{ backgroundColor: '#6B3B82', borderRadius: 15 }}>
-							<ListItemAvatar>
-								<Avatar
-									alt="Sabores do Interior"
-									src="/companies/2.png"
-									sx={{ width: 50, height: 50 }}
-								/>
-							</ListItemAvatar>
-							<ListItemText
-								primary="Sabores do Interior"
-								primaryTypographyProps={{ fontWeight: 700 }}
-								sx={{ color: '#fff' }}
-							/>
-						</ListItem>
-
-						<Box component="li" m={1} />
-
-						<ListItem sx={{ backgroundColor: '#6B3B82', borderRadius: 15 }}>
-							<ListItemAvatar>
-								<Avatar
-									alt="Parque dos Ipês"
-									src="/companies/3.png"
-									sx={{ width: 50, height: 50 }}
-								/>
-							</ListItemAvatar>
-							<ListItemText
-								primary="Parque dos Ipês"
-								primaryTypographyProps={{ fontWeight: 700 }}
-								sx={{ color: '#fff' }}
-							/>
-						</ListItem>
-
-						<Box component="li" m={1} />
-
-						<ListItem sx={{ backgroundColor: '#6B3B82', borderRadius: 15 }}>
-							<ListItemAvatar>
-								<Avatar
-									alt="Rancho do Vô João"
-									src="/companies/4.png"
-									sx={{ width: 50, height: 50 }}
-								/>
-							</ListItemAvatar>
-							<ListItemText
-								primary="Rancho do Vô João"
-								primaryTypographyProps={{ fontWeight: 700 }}
-								sx={{ color: '#fff' }}
-							/>
-						</ListItem>
-
-						<Box component="li" m={1} />
-
-						<ListItem sx={{ backgroundColor: '#6B3B82', borderRadius: 15 }}>
-							<ListItemAvatar>
-								<Avatar
-									alt="Parque Aquático Splash"
-									src="/companies/5.png"
-									sx={{ width: 50, height: 50 }}
-								/>
-							</ListItemAvatar>
-							<ListItemText
-								primary="Parque Aquático Splash"
-								primaryTypographyProps={{ fontWeight: 700 }}
-								sx={{ color: '#fff' }}
-							/>
-						</ListItem>
-
-						<Box component="li" m={1} />
-
-						<ListItem sx={{ backgroundColor: '#6B3B82', borderRadius: 15 }}>
-							<ListItemAvatar>
-								<Avatar
-									alt="Fazenda do Vale"
-									src="/companies/6.png"
-									sx={{ width: 50, height: 50 }}
-								/>
-							</ListItemAvatar>
-							<ListItemText
-								primary="Fazenda do Vale"
-								primaryTypographyProps={{ fontWeight: 700 }}
-								sx={{ color: '#fff' }}
-							/>
-						</ListItem>
+								{index !== array.length - 1 && <Box component="li" m={1} />}
+							</>
+						))}
 					</List>
 				</Paper>
 			</Container>

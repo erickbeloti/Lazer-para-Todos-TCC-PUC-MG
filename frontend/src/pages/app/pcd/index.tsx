@@ -25,7 +25,7 @@ export default function Index() {
 		data: favoritos,
 		error: errorFavoritos,
 		isLoading: isLoadingFavoritos,
-	} = useSWR<FavoritosApiType[]>(
+	} = useSWR<ProprietarioSummaryApiType[]>(
 		session && !isLoadingApi ? `/api/pcds/${session?.user.id}/favoritos` : null,
 		fetcher,
 	);
@@ -34,7 +34,7 @@ export default function Index() {
 		data: sugestoes,
 		error: errorSugestoes,
 		isLoading: isLoadingSugestoes,
-	} = useSWR<SugestoesApiType[]>(
+	} = useSWR<ProprietarioSummaryApiType[]>(
 		session && !isLoadingApi ? `/api/pcds/${session?.user.id}/sugestoes` : null,
 		fetcher,
 	);
