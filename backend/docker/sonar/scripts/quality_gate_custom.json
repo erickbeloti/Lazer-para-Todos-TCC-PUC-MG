@@ -1,0 +1,194 @@
+{
+    "name": "Java_Gate",
+    "conditions": [
+        {
+            "metric": "new_coverage",
+            "op": "LT",
+            "error": "80"
+        },
+        {
+            "metric": "coverage",
+            "op": "LT",
+            "error": "80"
+        },
+        {
+            "metric": "new_branch_coverage",
+            "op": "LT",
+            "error": "80"
+        },
+        {
+            "metric": "branch_coverage",
+            "op": "LT",
+            "error": "80"
+        },
+        {
+            "metric": "new_duplicated_blocks",
+            "op": "GT",
+            "error": "100"
+        },
+        {
+            "metric": "duplicated_blocks",
+            "op": "GT",
+            "error": "100"
+        },
+        {
+            "metric": "new_duplicated_lines_density",
+            "op": "GT",
+            "error": "20"
+        },
+        {
+            "metric": "duplicated_lines_density",
+            "op": "GT",
+            "error": "20"
+        },
+        {
+            "metric": "new_maintainability_rating",
+            "op": "GT",
+            "error": "1"
+        },
+        {
+            "metric": "maintainability_rating",
+            "op": "GT",
+            "error": "1"
+        },
+        {
+            "metric": "new_blocker_violations",
+            "op": "GT",
+            "error": "0"
+        },
+        {
+            "metric": "blocker_violations",
+            "op": "GT",
+            "error": "0"
+        },
+        {
+            "metric": "new_bugs",
+            "op": "GT",
+            "error": "5"
+        },
+        {
+            "metric": "bugs",
+            "op": "GT",
+            "error": "5"
+        },
+        {
+            "metric": "new_code_smells",
+            "op": "GT",
+            "error": "20"
+        },
+        {
+            "metric": "code_smells",
+            "op": "GT",
+            "error": "20"
+        },
+        {
+            "metric": "new_critical_violations",
+            "op": "GT",
+            "error": "0"
+        },
+        {
+            "metric": "critical_violations",
+            "op": "GT",
+            "error": "0"
+        },
+        {
+            "metric": "new_info_violations",
+            "op": "GT",
+            "error": "25"
+        },
+        {
+            "metric": "info_violations",
+            "op": "GT",
+            "error": "25"
+        },
+        {
+            "metric": "new_major_violations",
+            "op": "GT",
+            "error": "5"
+        },
+        {
+            "metric": "major_violations",
+            "op": "GT",
+            "error": "5"
+        },
+        {
+            "metric": "new_minor_violations",
+            "op": "GT",
+            "error": "15"
+        },
+        {
+            "metric": "minor_violations",
+            "op": "GT",
+            "error": "15"
+        },
+        {
+            "metric": "new_vulnerabilities",
+            "op": "GT",
+            "error": "0"
+        },
+        {
+            "metric": "vulnerabilities",
+            "op": "GT",
+            "error": "0"
+        },
+        {
+            "metric": "new_reliability_rating",
+            "op": "GT",
+            "error": "1"
+        },
+        {
+            "metric": "reliability_rating",
+            "op": "GT",
+            "error": "1"
+        },
+        {
+            "metric": "new_security_hotspots_reviewed",
+            "op": "LT",
+            "error": "100"
+        },
+        {
+            "metric": "security_hotspots_reviewed",
+            "op": "LT",
+            "error": "100"
+        },
+        {
+            "metric": "new_security_rating",
+            "op": "GT",
+            "error": "1"
+        },
+        {
+            "metric": "security_rating",
+            "op": "GT",
+            "error": "1"
+        },
+        {
+            "metric": "new_security_review_rating",
+            "op": "GT",
+            "error": "1"
+        },
+        {
+            "metric": "security_review_rating",
+            "op": "GT",
+            "error": "1"
+        },
+        {
+            "metric": "new_sqale_debt_ratio",
+            "op": "GT",
+            "error": "5"
+        },
+        {
+            "metric": "sqale_debt_ratio",
+            "op": "GT",
+            "error": "5"
+        }
+    ],
+    "isBuiltIn": false,
+    "actions": {
+        "rename": true,
+        "setAsDefault": false,
+        "copy": true,
+        "associateProjects": false,
+        "delete": false,
+        "manageConditions": true
+    }
+}
