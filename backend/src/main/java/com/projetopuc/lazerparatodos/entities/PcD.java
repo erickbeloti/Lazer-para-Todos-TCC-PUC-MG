@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -44,11 +45,13 @@ public class PcD {
             joinColumns = {@JoinColumn(name = "fav_pcd_id")},
             inverseJoinColumns = {@JoinColumn(name = "fav_proprietario_id")}
     )
-    private List<Proprietario> favoritos;
+    @Builder.Default
+    private List<Proprietario> favoritos = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "pcd_deficiencias_table")
-    private List<Deficiencia> deficiencias;
+    @Builder.Default
+    private List<Deficiencia> deficiencias = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_id", nullable = false)

@@ -69,6 +69,11 @@ public class PcDController {
         return ResponseEntity.ok(pcDService.findAllFavoritos(id));
     }
 
+    @GetMapping(path = "/{pcDId}/favoritos/{proprietarioId}")
+    public  ResponseEntity<List<ProprietarioSummaryResponseDto>> getFavoritoById(@PathVariable Integer pcDId, @PathVariable Integer proprietarioId){
+        return ResponseEntity.ok(pcDService.findFavoritoById(pcDId, proprietarioId));
+    }
+
     @GetMapping(path = "/{id}/sugestoes")
     public  ResponseEntity<List<ProprietarioSummaryResponseDto>> getallSugestoes(@PathVariable Integer id){
         return ResponseEntity.ok(pcDService.findAllSugestoes(id));
