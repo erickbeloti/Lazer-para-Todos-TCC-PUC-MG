@@ -52,7 +52,7 @@ public class PcDService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public PcDCreateResponseDto create(PcDCreateRequestDto pcDCreateRequestDto){
+    public PcDCreateResponseDto create(PcDCreateRequestDto pcDCreateRequestDto) {
         PcD pcD = pcDMapper.toPcD(pcDCreateRequestDto);
         pcD.getUsuario().setSenha(passwordEncoder.encode(pcD.getUsuario().getPassword()));
 
@@ -66,7 +66,7 @@ public class PcDService {
     }
 
     @Transactional
-    public PcDUpdateResponseDto update(PcDUpdateRequestDto pcDUpdateRequestDto, Integer id){
+    public PcDUpdateResponseDto update(PcDUpdateRequestDto pcDUpdateRequestDto, Integer id) {
         PcD existingPcD = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
         PcD pcD = pcDMapper.toPcD(pcDUpdateRequestDto, existingPcD);
 
@@ -87,14 +87,14 @@ public class PcDService {
         return pcDMapper.toPcDCreateResponseDto(pcD);
     }
 
-    public List<ProprietarioSummaryResponseDto> findAllFavoritos(Integer id){
+    public List<ProprietarioSummaryResponseDto> findAllFavoritos(Integer id) {
 
         Optional<PcD> usuarioPcd = pcdRepository.findAllWithFavoritos(id);
 
         return proprietarioMapper.toProprietarioSummaryResponseDtoList(usuarioPcd.orElse(PcD.builder().build()).getFavoritos());
     }
 
-    public List<ProprietarioSummaryResponseDto> findFavoritoById(Integer pcDId, Integer proprietarioId){
+    public List<ProprietarioSummaryResponseDto> findFavoritoById(Integer pcDId, Integer proprietarioId) {
 
         Optional<PcD> usuarioPcd = pcdRepository.findFavoritoById(pcDId, proprietarioId);
 
@@ -102,7 +102,7 @@ public class PcDService {
     }
 
 
-    public List<ProprietarioSummaryResponseDto> findAllSugestoes(Integer id){
+    public List<ProprietarioSummaryResponseDto> findAllSugestoes(Integer id) {
         PcD usuarioPcd = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
 
         String cidade = usuarioPcd.getEndereco().getCidade();
@@ -113,25 +113,26 @@ public class PcDService {
 
     }
 
-    public PcDFavoritoResponseDto seguirProprietario (PcDCreateFavoritoRequestDto pcdCreateFavoritoCreateDto, Integer id){
+    public PcDFavoritoResponseDto seguirProprietario(PcDCreateFavoritoRequestDto pcdCreateFavoritoCreateDto, Integer id) {
         PcD usuarioPcd = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
 
 
         Proprietario proprietarioSelecionado = proprietarioRepository.findById(pcdCreateFavoritoCreateDto.getProprietarioId()).
-                 orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
+                orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
 
         List<Proprietario> favoritosList = usuarioPcd.getFavoritos();
 
         favoritosList.add(proprietarioSelecionado);
 
-         pcdRepository.save(usuarioPcd);
+        pcdRepository.save(usuarioPcd);
 
-         return proprietarioMapper.toPcDCreateFavoritoResponseDto(proprietarioSelecionado) ;
+        return proprietarioMapper.toPcDCreateFavoritoResponseDto(proprietarioSelecionado);
     }
-    public PcDFavoritoResponseDto desseguirProprietario (Integer idUsuario, Integer idProprietario){
-        PcD usuarioPcd = pcdRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
 
-        Proprietario proprietarioSelecionado = proprietarioRepository.findById(idProprietario).
+    public void desseguirProprietario(Integer pcdId, Integer proprietarioId) {
+        PcD usuarioPcd = pcdRepository.findById(pcdId).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
+
+        Proprietario proprietarioSelecionado = proprietarioRepository.findById(proprietarioId).
                 orElseThrow(() -> new RuntimeException("Proprietário não encontrado"));
 
         List<Proprietario> favoritosList = usuarioPcd.getFavoritos();
@@ -139,8 +140,5 @@ public class PcDService {
         favoritosList.remove(proprietarioSelecionado);
 
         pcdRepository.save(usuarioPcd);
-
-        return proprietarioMapper.toPcDCreateFavoritoResponseDto(proprietarioSelecionado) ;
     }
-
 }

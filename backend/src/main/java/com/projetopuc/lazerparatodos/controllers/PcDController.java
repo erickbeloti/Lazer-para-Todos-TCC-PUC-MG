@@ -49,9 +49,11 @@ public class PcDController {
                                                                @PathVariable Integer id){
         return ResponseEntity.ok(pcDService.seguirProprietario(pcdCreateFavoritoCreateDto, id));
     }
-    @DeleteMapping(path = "/{id}/favoritos/{id2}")
-    public ResponseEntity<PcDFavoritoResponseDto> deleteFavorito(@PathVariable Integer id, @PathVariable Integer id2) {
-        return ResponseEntity.ok(pcDService.desseguirProprietario(id, id2));
+
+    @DeleteMapping(path = "/{pcDId}/favoritos/{proprietarioId}")
+    public ResponseEntity<PcDFavoritoResponseDto> deleteFavorito(@PathVariable Integer pcDId, @PathVariable Integer proprietarioId) {
+        pcDService.desseguirProprietario(pcDId, proprietarioId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
