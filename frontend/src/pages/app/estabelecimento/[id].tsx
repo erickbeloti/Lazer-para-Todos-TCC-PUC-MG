@@ -18,23 +18,65 @@ import ImagemProprietario from '@/components/proprietario/ImageProprietario';
 import DisabilityIcon from '@/components/disability';
 import Comentario from '@/components/proprietario/Comentario';
 import useApiAuth from '@/lib/hooks/useApiAuth';
+import { useSnackbar } from 'notistack';
+import { useSession } from 'next-auth/react';
+import { mutate } from 'swr';
 
 export default function Estabelecimento() {
+	const { enqueueSnackbar } = useSnackbar();
+	const { data: session } = useSession();
 	const { query, asPath } = useRouter();
-	const { id } = query;
+	const { id: proprietarioId } = query;
 	const { apiAuth, isLoadingApi } = useApiAuth();
 	const fetcher = (url: string) => apiAuth.get(url).then(res => res.data);
 
 	const {
 		data: proprietario,
-		error,
-		isLoading,
+		error: errorProprietario,
+		isLoading: isLoadingProprietario,
 	} = useSWR<ProprietarioUserApiType>(
-		id && !isLoadingApi ? `/api/proprietarios/${id}` : null,
+		proprietarioId && !isLoadingApi
+			? `/api/proprietarios/${proprietarioId}`
+			: null,
 		fetcher,
 	);
 
-	if (!isLoading && id && error)
+	const { data: favoritos } = useSWR<ProprietarioSummaryApiType[]>(
+		proprietarioId && !isLoadingApi
+			? `/api/pcds/${session?.user.id}/favoritos/${proprietarioId}`
+			: null,
+		fetcher,
+	);
+
+	const handleSeguir = async () => {
+		try {
+			if (favoritos?.length === 0) {
+				await apiAuth.post(`/api/pcds/${session?.user.id}/favoritos`, {
+					proprietarioId,
+				});
+
+				enqueueSnackbar('Estabelecimento favoritado com sucesso', {
+					variant: 'success',
+				});
+			} else {
+				await apiAuth.delete(
+					`/api/pcds/${session?.user.id}/favoritos/${proprietarioId}`,
+				);
+
+				enqueueSnackbar('Estabelecimento desfavoritado com sucesso', {
+					variant: 'success',
+				});
+			}
+
+			mutate(`/api/pcds/${session?.user.id}/favoritos/${proprietarioId}`);
+		} catch (error) {
+			enqueueSnackbar('Erro ao tentar favoritar esse estabelecimento', {
+				variant: 'error',
+			});
+		}
+	};
+
+	if (!isLoadingProprietario && proprietarioId && errorProprietario)
 		return (
 			<Container component="main" maxWidth="sm">
 				<Box m={2}>
@@ -52,7 +94,7 @@ export default function Estabelecimento() {
 				<title>Estabelecimento</title>
 			</Head>
 
-			{(isLoading || !id) && (
+			{(isLoadingProprietario || !proprietarioId) && (
 				<Backdrop
 					sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
 					open
@@ -61,7 +103,7 @@ export default function Estabelecimento() {
 				</Backdrop>
 			)}
 
-			{!isLoading && id && (
+			{!isLoadingProprietario && proprietarioId && (
 				<Container component="main" maxWidth="md">
 					<Box mt={2} />
 					<Paper
@@ -108,8 +150,9 @@ export default function Estabelecimento() {
 											sx={{
 												width: 103,
 											}}
+											onClick={handleSeguir}
 										>
-											Seguir
+											{favoritos?.length === 0 ? 'Seguir' : 'Seguindo'}
 										</Button>
 									</Box>
 								</Grid>
@@ -120,7 +163,7 @@ export default function Estabelecimento() {
 							<Rating
 								precision={0.5}
 								size="large"
-								value={proprietario?.avaliacaoMedia}
+								value={proprietario?.avaliacaoMedia || null}
 								readOnly
 							/>
 						</Grid>

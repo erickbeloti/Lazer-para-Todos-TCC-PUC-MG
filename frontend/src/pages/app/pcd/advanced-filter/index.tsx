@@ -19,6 +19,7 @@ import useApiAuth from '@/lib/hooks/useApiAuth';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { ItemListProprietario } from '@/components/proprietario/ItemListProprietario';
+import { Fragment } from 'react';
 
 interface FormData {
 	name: string;
@@ -393,27 +394,28 @@ export default function AdvancedFilter() {
 					</form>
 				</Paper>
 
-				<Box mt={2} />
-				<Paper
-					variant="outlined"
-					sx={{
-						borderRadius: '15px',
-						border: 0,
-						padding: 5,
-					}}
-				>
-					<List sx={{ display: 'flex', flexDirection: 'column' }}>
-						{estabelecimentos?.map((estabelecimento, index, array) => (
-							<>
-								<ItemListProprietario
-									key={estabelecimento.id}
-									estabelecimento={estabelecimento}
-								/>
-								{index !== array.length - 1 && <Box component="li" m={1} />}
-							</>
-						))}
-					</List>
-				</Paper>
+				{estabelecimentos && estabelecimentos?.length > 0 && (
+					<>
+						<Box mt={2} />
+						<Paper
+							variant="outlined"
+							sx={{
+								borderRadius: '15px',
+								border: 0,
+								padding: 5,
+							}}
+						>
+							<List sx={{ display: 'flex', flexDirection: 'column' }}>
+								{estabelecimentos?.map((estabelecimento, index, array) => (
+									<Fragment key={estabelecimento.id}>
+										<ItemListProprietario estabelecimento={estabelecimento} />
+										{index !== array.length - 1 && <Box component="li" m={1} />}
+									</Fragment>
+								))}
+							</List>
+						</Paper>
+					</>
+				)}
 			</Container>
 		</>
 	);
