@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PcDService {
@@ -88,10 +89,18 @@ public class PcDService {
 
     public List<ProprietarioSummaryResponseDto> findAllFavoritos(Integer id){
 
-        PcD usuarioPcd = pcdRepository.findAllWithFavoritos(id);
+        Optional<PcD> usuarioPcd = pcdRepository.findAllWithFavoritos(id);
 
-        return proprietarioMapper.toProprietarioSummaryResponseDtoList(usuarioPcd.getFavoritos());
+        return proprietarioMapper.toProprietarioSummaryResponseDtoList(usuarioPcd.orElse(PcD.builder().build()).getFavoritos());
     }
+
+    public List<ProprietarioSummaryResponseDto> findFavoritoById(Integer pcDId, Integer proprietarioId){
+
+        Optional<PcD> usuarioPcd = pcdRepository.findFavoritoById(pcDId, proprietarioId);
+
+        return proprietarioMapper.toProprietarioSummaryResponseDtoList(usuarioPcd.orElse(PcD.builder().build()).getFavoritos());
+    }
+
 
     public List<ProprietarioSummaryResponseDto> findAllSugestoes(Integer id){
         PcD usuarioPcd = pcdRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário PcD não encontrado"));
