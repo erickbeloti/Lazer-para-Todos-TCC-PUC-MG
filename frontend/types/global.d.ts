@@ -73,13 +73,7 @@ declare global {
 		comentarios: ComentarioApiType[];
 	}
 
-	interface FavoritosApiType {
-		id: number;
-		nomeEstabelecimento: string;
-		urlIcone: string;
-	}
-
-	interface SugestoesApiType {
+	interface ProprietarioSummaryApiType {
 		id: number;
 		nomeEstabelecimento: string;
 		urlIcone: string;
