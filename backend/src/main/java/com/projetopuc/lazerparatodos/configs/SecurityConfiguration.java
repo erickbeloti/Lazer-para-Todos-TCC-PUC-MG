@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(publicRequests ->
                         publicRequests
-                                .requestMatchers("/actuator/**", "/api/auth/**")
+                                .requestMatchers("/actuator/**", "/api/auth/**", "/api/enderecos/**", "/api/deficiencias/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/pcds")
                                 .permitAll()
