@@ -6,8 +6,10 @@ import {
 	Button,
 	CircularProgress,
 	Container,
+	IconButton,
 	Paper,
 	Rating,
+	TextField,
 	Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -21,6 +23,22 @@ import useApiAuth from '@/lib/hooks/useApiAuth';
 import { useSnackbar } from 'notistack';
 import { useSession } from 'next-auth/react';
 import { mutate } from 'swr';
+import { useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+interface FormData {
+	commentary: string;
+	rating: number | null;
+	disabilitiesTypes: DisabilityApiType[];
+}
+
+const schema = yup
+	.object({
+		commentary: yup.string().required('Comentário obrigatório'),
+	})
+	.required();
 
 export default function Estabelecimento() {
 	const { enqueueSnackbar } = useSnackbar();
@@ -29,6 +47,20 @@ export default function Estabelecimento() {
 	const { id: proprietarioId } = query;
 	const { apiAuth, isLoadingApi } = useApiAuth();
 	const fetcher = (url: string) => apiAuth.get(url).then(res => res.data);
+	const [isOpenPanelCommentary, setOpenPanelCommentary] = useState(false);
+	const {
+		handleSubmit,
+		control,
+		formState: { errors, isSubmitting },
+		reset,
+	} = useForm<FormData>({
+		resolver: yupResolver(schema),
+		defaultValues: {
+			commentary: '',
+			rating: null,
+			disabilitiesTypes: [],
+		},
+	});
 
 	const {
 		data: proprietario,
@@ -45,6 +77,11 @@ export default function Estabelecimento() {
 		proprietarioId && !isLoadingApi
 			? `/api/pcds/${session?.user.id}/favoritos/${proprietarioId}`
 			: null,
+		fetcher,
+	);
+
+	const { data: disabilitiesTypes = [] } = useSWR<DisabilityApiType[]>(
+		'/api/deficiencias',
 		fetcher,
 	);
 
@@ -71,6 +108,42 @@ export default function Estabelecimento() {
 			mutate(`/api/pcds/${session?.user.id}/favoritos/${proprietarioId}`);
 		} catch (error) {
 			enqueueSnackbar('Erro ao tentar favoritar esse estabelecimento', {
+				variant: 'error',
+			});
+		}
+	};
+
+	const handleCancelar = () => {
+		setOpenPanelCommentary(!isOpenPanelCommentary);
+		reset({ commentary: '', rating: null, disabilitiesTypes: [] });
+	};
+
+	const handleComentar = () => {
+		setOpenPanelCommentary(!isOpenPanelCommentary);
+		reset({ commentary: '', rating: null, disabilitiesTypes: [] });
+	};
+
+	const onSubmit: SubmitHandler<FormData> = async data => {
+		try {
+			await apiAuth.post(`/api/comentarios`, {
+				comentario: data.commentary,
+				avaliacao: data.rating,
+				deficienciasIds: data.disabilitiesTypes.map(
+					disabilityType => disabilityType.id,
+				),
+				proprietarioId: proprietarioId,
+				pcDId: session?.user.id,
+			});
+
+			setOpenPanelCommentary(!isOpenPanelCommentary);
+			reset({ commentary: '', rating: null, disabilitiesTypes: [] });
+			mutate(`/api/proprietarios/${proprietarioId}`);
+
+			enqueueSnackbar('Comentário realizado com sucesso', {
+				variant: 'success',
+			});
+		} catch (error) {
+			enqueueSnackbar('Erro ao tentar comentar', {
 				variant: 'error',
 			});
 		}
@@ -209,12 +282,173 @@ export default function Estabelecimento() {
 						sx={{
 							borderRadius: '15px',
 							border: 0,
-							p: 2,
+							pt: 4,
+							pl: 2,
+							pr: 2,
+							pb: 2,
 							display: 'flex',
 							flexDirection: 'column',
 							gap: 3,
+							position: 'relative',
 						}}
 					>
+						{!isOpenPanelCommentary && (
+							<Box position={'absolute'} top={8} right={8}>
+								<Button
+									variant="contained"
+									color="secondary"
+									sx={{
+										width: 103,
+									}}
+									onClick={handleComentar}
+								>
+									Comentar
+								</Button>
+							</Box>
+						)}
+
+						{isOpenPanelCommentary && (
+							<Box>
+								<Typography variant="h6" fontWeight={700}>
+									{session?.user.name}
+								</Typography>
+
+								<Paper
+									variant="outlined"
+									sx={{
+										borderRadius: '15px',
+										border: 0,
+										backgroundColor: '#6B3B82',
+										color: '#fff',
+										p: 2,
+									}}
+								>
+									<form onSubmit={handleSubmit(onSubmit)} noValidate>
+										<Grid container justifyContent={'end'} spacing={1}>
+											<Grid xs={12} md>
+												<Controller
+													name="commentary"
+													control={control}
+													render={({ field }) => (
+														<TextField
+															{...field}
+															required
+															fullWidth
+															label="Comentário"
+															multiline
+															minRows={4}
+															variant="filled"
+															error={!!errors.commentary}
+															helperText={errors.commentary?.message}
+														/>
+													)}
+												/>
+											</Grid>
+
+											<Grid
+												container
+												direction={'column'}
+												justifyContent={'end'}
+												alignItems={'end'}
+											>
+												<Grid>
+													<Controller
+														name="rating"
+														control={control}
+														render={({ field }) => {
+															const { onChange } = field;
+															return (
+																<Rating
+																	{...field}
+																	onChange={(_event, value) => onChange(value)}
+																	value={
+																		field.value === null
+																			? null
+																			: parseFloat(field.value.toString())
+																	}
+																	precision={0.5}
+																	size="large"
+																/>
+															);
+														}}
+													/>
+												</Grid>
+
+												<Grid container paddingBottom={2}>
+													{disabilitiesTypes.map(disabilityType => (
+														<Controller
+															key={disabilityType.id}
+															name="disabilitiesTypes"
+															control={control}
+															render={({ field: { onChange, value } }) => (
+																<IconButton
+																	onClick={() => {
+																		const findDisability = value.find(
+																			def => def.id === disabilityType.id,
+																		);
+																		if (findDisability) {
+																			const newValue = value.filter(
+																				def => def.id !== findDisability.id,
+																			);
+																			onChange(newValue);
+																		} else {
+																			onChange([...value, ...[disabilityType]]);
+																		}
+																	}}
+																	color="secondary"
+																	sx={{ padding: 0 }}
+																>
+																	<DisabilityIcon
+																		type={disabilityType.tipoDeDeficiencia}
+																		elabled={
+																			value.find(
+																				def => def.id === disabilityType.id,
+																			)
+																				? true
+																				: false
+																		}
+																		size={25}
+																	/>
+																</IconButton>
+															)}
+														/>
+													))}
+												</Grid>
+
+												<Grid container spacing={1}>
+													<Grid>
+														<Button
+															variant="contained"
+															color="primary"
+															sx={{
+																width: 103,
+															}}
+															onClick={handleCancelar}
+														>
+															Cancelar
+														</Button>
+													</Grid>
+													<Grid>
+														<Button
+															variant="contained"
+															color="secondary"
+															sx={{
+																width: 103,
+															}}
+															type="submit"
+															disabled={isSubmitting}
+														>
+															Comentar
+														</Button>
+													</Grid>
+												</Grid>
+											</Grid>
+										</Grid>
+									</form>
+								</Paper>
+							</Box>
+						)}
+
 						{proprietario?.comentarios.length === 0 ? (
 							<Typography variant="h6">Nenhum comentário</Typography>
 						) : (
