@@ -106,6 +106,10 @@ export default function Index() {
 							</Typography>
 						</Grid>
 
+						{favoritos?.length === 0 && (
+							<Typography>Ainda não há favoritos para listar aqui.</Typography>
+						)}
+
 						{favoritos?.map(favorito => (
 							<Grid key={favorito.id}>
 								<AvatarProprietario
@@ -130,6 +134,12 @@ export default function Index() {
 								Explore!
 							</Typography>
 						</Grid>
+
+						{sugestoes?.length === 0 && (
+							<Typography>
+								Não foram encontrados estabelecimentos para a sua cidade.
+							</Typography>
+						)}
 
 						{sugestoes?.map(sugestao => (
 							<Grid key={sugestao.id}>
