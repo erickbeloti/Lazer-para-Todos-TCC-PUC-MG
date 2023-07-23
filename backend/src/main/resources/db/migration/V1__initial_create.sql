@@ -56,7 +56,7 @@ CREATE TABLE comentario_table
 (
     id              serial,
     avaliacao       decimal(4, 2) NOT NULL,
-    comentario      varchar(255)  NOT NULL,
+    comentario      varchar(1024)  NOT NULL,
     pcd_id          int DEFAULT NULL,
     proprietario_id int DEFAULT NULL,
     PRIMARY KEY (id),
