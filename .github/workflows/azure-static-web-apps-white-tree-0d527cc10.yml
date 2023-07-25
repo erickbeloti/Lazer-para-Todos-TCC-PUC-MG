@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
+      - name: Use variables
+        run: |
+          echo "NEXT_PUBLIC_URL_BACKEND variable : $NEXT_PUBLIC_URL_BACKEND"
+        env:
+          NEXT_PUBLIC_URL_BACKEND: ${{ vars.NEXT_PUBLIC_URL_BACKEND }}
       - uses: actions/checkout@v3
         with:
           submodules: true
