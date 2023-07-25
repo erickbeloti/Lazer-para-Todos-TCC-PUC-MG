@@ -32,7 +32,9 @@ jobs:
           output_location: "" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env:
-          NEXT_PUBLIC_URL_BACKEND: https://lazerparatodos-app.onrender.com   
+          NEXT_PUBLIC_URL_BACKEND: ${{ env.NEXT_PUBLIC_URL_BACKEND }}
+          NEXTAUTH_URL: ${{ env.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXT_AUTH_SECRET }}
        
 
   close_pull_request_job:
