@@ -29,7 +29,7 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v1
         with:
-          appSourcePath: ${{ github.workspace }}backend 
+          appSourcePath: ${{ github.workspace }}/backend 
           registryUrl: lazerparatodosregistry.azurecr.io
           registryUsername: ${{ secrets.LAZERPARATODOS_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.LAZERPARATODOS_REGISTRY_PASSWORD }}
