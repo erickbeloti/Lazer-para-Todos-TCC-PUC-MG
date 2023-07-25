@@ -4,10 +4,20 @@ on:
   push:
     branches:
       - main
+    paths:
+    - 'frontend/**'
+    - '.github/workflows/azure-static-web-apps-white-tree-0d527cc10.yml'
+
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+    paths:
+    - 'frontend/**'
+    - '.github/workflows/azure-static-web-apps-white-tree-0d527cc10.yml'
+
+# Allow mannually trigger 
+  workflow_dispatch:      
 
 jobs:
   build_and_deploy_job:
