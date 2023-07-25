@@ -33,8 +33,6 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env:
           NEXT_PUBLIC_URL_BACKEND: ${{ vars.NEXT_PUBLIC_URL_BACKEND }}
-          NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXT_AUTH_SECRET }}
        
 
   close_pull_request_job:
