@@ -13,9 +13,10 @@ jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
+    environment: production
     name: Build and Deploy Job
     steps:
-      - name: Use variables
+      - name: Check variables
         run: |
           echo "NEXT_PUBLIC_URL_BACKEND variable : $NEXT_PUBLIC_URL_BACKEND"
         env:
