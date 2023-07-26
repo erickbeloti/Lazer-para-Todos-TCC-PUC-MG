@@ -19,6 +19,7 @@ import useSWR from 'swr';
 import DisabilityIcon from '@/components/disability';
 import ImagemProprietario from '@/components/proprietario/ImageProprietario';
 import useApiAuth from '@/lib/hooks/useApiAuth';
+import Link from 'next/link';
 
 export default function Index() {
 	const { apiAuth, isLoadingApi } = useApiAuth();
@@ -67,15 +68,17 @@ export default function Index() {
 					<Box mt={2} />
 
 					<Grid container justifyContent={'center'} mb={1}>
-						<Button
-							variant="contained"
-							color="secondary"
-							sx={{
-								width: 250,
-							}}
-						>
-							Visualizar estabelecimento
-						</Button>
+						<Link href={`/app/estabelecimento/${session.user.id}`} passHref>
+							<Button
+								variant="contained"
+								color="secondary"
+								sx={{
+									width: 250,
+								}}
+							>
+								Visualizar estabelecimento
+							</Button>
+						</Link>
 					</Grid>
 
 					<Paper

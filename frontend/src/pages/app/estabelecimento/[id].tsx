@@ -43,6 +43,7 @@ const schema = yup
 export default function Estabelecimento() {
 	const { enqueueSnackbar } = useSnackbar();
 	const { data: session } = useSession();
+	const readOnly = session?.user.userRole !== 'PCD';
 	const { query, asPath } = useRouter();
 	const { id: proprietarioId } = query;
 	const { apiAuth, isLoadingApi } = useApiAuth();
@@ -74,7 +75,7 @@ export default function Estabelecimento() {
 	);
 
 	const { data: favoritos } = useSWR<ProprietarioSummaryApiType[]>(
-		proprietarioId && !isLoadingApi
+		proprietarioId && !isLoadingApi && !readOnly
 			? `/api/pcds/${session?.user.id}/favoritos/${proprietarioId}`
 			: null,
 		fetcher,
@@ -216,18 +217,20 @@ export default function Estabelecimento() {
 										{proprietario?.telefone}
 									</Typography>
 
-									<Box position={'absolute'} top={8} right={8}>
-										<Button
-											variant="contained"
-											color="secondary"
-											sx={{
-												width: 103,
-											}}
-											onClick={handleSeguir}
-										>
-											{favoritos?.length === 0 ? 'Seguir' : 'Seguindo'}
-										</Button>
-									</Box>
+									{!readOnly && (
+										<Box position={'absolute'} top={8} right={8}>
+											<Button
+												variant="contained"
+												color="secondary"
+												sx={{
+													width: 103,
+												}}
+												onClick={handleSeguir}
+											>
+												{favoritos?.length === 0 ? 'Seguir' : 'Seguindo'}
+											</Button>
+										</Box>
+									)}
 								</Grid>
 							</Grid>
 						</Grid>
@@ -292,7 +295,7 @@ export default function Estabelecimento() {
 							position: 'relative',
 						}}
 					>
-						{!isOpenPanelCommentary && (
+						{!isOpenPanelCommentary && !readOnly && (
 							<Box position={'absolute'} top={8} right={8}>
 								<Button
 									variant="contained"
