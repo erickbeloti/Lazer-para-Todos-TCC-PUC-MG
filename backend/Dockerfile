@@ -20,4 +20,4 @@ COPY --from=MAVEN_BUILD /build/target/*.jar app.jar
 ENV PORT 8080
 
 EXPOSE $PORT
-ENTRYPOINT ["java", "-jar", "-Dserver.port=${PORT}", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-XX:TieredStopAtLevel=1", "-noverify", "-Dserver.port=${PORT}", "app.jar"]
