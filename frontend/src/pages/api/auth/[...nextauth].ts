@@ -7,6 +7,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 const authOptions: NextAuthOptions = {
 	session: {
 		strategy: 'jwt',
+		maxAge: 12 * 60 * 60,
 	},
 	providers: [
 		CredentialsProvider({
@@ -38,6 +39,7 @@ const authOptions: NextAuthOptions = {
 
 					return null;
 				} catch (e) {
+					console.log(e);
 					throw new Error('invalid credentials');
 				}
 			},
