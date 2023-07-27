@@ -55,7 +55,7 @@ CREATE TABLE proprietario_table
 CREATE TABLE comentario_table
 (
     id              serial,
-    avaliacao       decimal(4, 2) NOT NULL,
+    avaliacao       decimal(4, 2),
     comentario      varchar(1024)  NOT NULL,
     pcd_id          int DEFAULT NULL,
     proprietario_id int DEFAULT NULL,
