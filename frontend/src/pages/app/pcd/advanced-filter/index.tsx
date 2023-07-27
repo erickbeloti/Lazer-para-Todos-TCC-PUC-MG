@@ -9,6 +9,7 @@ import {
 	Paper,
 	Rating,
 	TextField,
+	Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -394,7 +395,7 @@ export default function AdvancedFilter() {
 					</form>
 				</Paper>
 
-				{estabelecimentos && estabelecimentos?.length > 0 && (
+				{estabelecimentos && (
 					<>
 						<Box mt={2} />
 						<Paper
@@ -406,12 +407,20 @@ export default function AdvancedFilter() {
 							}}
 						>
 							<List sx={{ display: 'flex', flexDirection: 'column' }}>
-								{estabelecimentos?.map((estabelecimento, index, array) => (
-									<Fragment key={estabelecimento.id}>
-										<ItemListProprietario estabelecimento={estabelecimento} />
-										{index !== array.length - 1 && <Box component="li" m={1} />}
-									</Fragment>
-								))}
+								{estabelecimentos?.length > 0 &&
+									estabelecimentos?.map((estabelecimento, index, array) => (
+										<Fragment key={estabelecimento.id}>
+											<ItemListProprietario estabelecimento={estabelecimento} />
+											{index !== array.length - 1 && (
+												<Box component="li" m={1} />
+											)}
+										</Fragment>
+									))}
+								{estabelecimentos?.length === 0 && (
+									<Typography variant="h5" textAlign="center">
+										Nenhum resultado encontrado
+									</Typography>
+								)}
 							</List>
 						</Paper>
 					</>
