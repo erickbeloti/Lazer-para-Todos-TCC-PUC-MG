@@ -26,7 +26,7 @@ public class Comentario {
     @Column(name="comentario", nullable = false)
     private String comentario;
 
-    @Column(name="avaliacao", nullable = false, precision = 4, scale = 2)
+    @Column(name="avaliacao", precision = 4, scale = 2)
     private BigDecimal avaliacao;
 
     @ManyToMany
